@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.*;
 
 public class Test extends JFrame {
 
@@ -17,7 +18,6 @@ public class Test extends JFrame {
     private JTextField taskTextField;
 
     public Test() {
-        // Set up the JFrame
         setTitle("To-Do Application");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,8 +39,9 @@ public class Test extends JFrame {
         // Set layout manager
         setLayout(new BorderLayout());
 
-        // Add components to the frame
-        add(new JScrollPane(toDoList), BorderLayout.CENTER);
+        // Wrap the JList in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(toDoList);
+        add(scrollPane, BorderLayout.CENTER);
 
         JPanel inputPanel = new JPanel();
         inputPanel.add(taskTextField);
@@ -49,54 +50,64 @@ public class Test extends JFrame {
         add(inputPanel, BorderLayout.SOUTH);
 
         // Add ActionListener for the "Add Task" button
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String task = taskTextField.getText().trim();
-                if (!task.isEmpty()) {
-                    toDoListModel.addElement(task);
-                    taskTextField.setText("");
-                }
-            }
-        });
+        addButton.addActionListener(e -> addTask());
 
         // Add ActionListener for the "Remove Task" button
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedIndex = toDoList.getSelectedIndex();
-                if (selectedIndex != -1) {
-                    toDoListModel.remove(selectedIndex);
-                }
-            }
-        });
+        removeButton.addActionListener(e -> removeTask());
 
         // Add MouseAdapter for handling mouse events (e.g., double-click to edit)
         toDoList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int selectedIndex = toDoList.getSelectedIndex();
-                    if (selectedIndex != -1) {
-                        String editedTask = JOptionPane.showInputDialog(Test.this, "Edit Task:", toDoListModel.get(selectedIndex));
-                        if (editedTask != null) {
-                            toDoListModel.setElementAt(editedTask, selectedIndex);
-                        }
-                    }
+                    editTask();
                 }
             }
         });
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Test().setVisible(true);
+    private void addTask() {
+        String task = taskTextField.getText().trim();
+        if (!task.isEmpty()) {
+            toDoListModel.addElement(task);
+            taskTextField.setText("");
+        }
+    }
+
+    private void removeTask() {
+        int selectedIndex = toDoList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            toDoListModel.remove(selectedIndex);
+        }
+    }
+
+    private void editTask() {
+        int selectedIndex = toDoList.getSelectedIndex();
+        if (selectedIndex != -1) {
+        	ArrayList <String>  list = new ArrayList<>();
+        	JPanel myPanel = new JPanel();
+        	JTextField editTaskInput = new JTextField(15);
+        	JTextField editDate = new JTextField(15);
+        	
+        	myPanel.add(new JLabel("Edit Task: "));
+        	myPanel.add(editTaskInput);
+        	myPanel.add(Box.createHorizontalStrut(15));
+        	myPanel.add(new JLabel("Date: "));
+        	myPanel.add(editDate);
+
+        	
+            int editedTask = JOptionPane.showConfirmDialog(null, myPanel, "Yuh",JOptionPane.OK_CANCEL_OPTION);
+            if (editedTask == JOptionPane.OK_OPTION) {
+                toDoListModel.setElementAt(editTaskInput.getText() + " - " + editDate.getText(), selectedIndex);
             }
-        });
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Test().setVisible(true));
     }
 }
+
 
 // TransferHandler for handling drag-and-drop reordering
 class ListItemTransferHandler extends TransferHandler {
