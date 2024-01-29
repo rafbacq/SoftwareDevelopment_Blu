@@ -35,7 +35,8 @@ public class Test extends JFrame {
         toDoList.setDragEnabled(true);
         toDoList.setDropMode(DropMode.INSERT);
         toDoList.setTransferHandler(new ListItemTransferHandler());
-
+        ImageIcon icon = new ImageIcon("Menu Image.png");
+       
         // Set layout manager
         setLayout(new BorderLayout());
 
@@ -44,7 +45,7 @@ public class Test extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel inputPanel = new JPanel();
-        inputPanel.add(taskTextField);
+        //inputPanel.add(taskTextField);
         inputPanel.add(addButton);
         inputPanel.add(removeButton);
         add(inputPanel, BorderLayout.SOUTH);
@@ -64,14 +65,40 @@ public class Test extends JFrame {
                 }
             }
         });
+        // Add menu bar and menu option
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        
+        JMenuItem fileMenu = new JMenuItem("File Menu");
+        JMenuItem colorTheme = new JMenuItem("colorTheme");
+        JMenuItem history = new JMenuItem("history");
+        JMenuItem quit = new JMenuItem("quit");
+        
+        
+        fileMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open your menu application here
+                JOptionPane.showMessageDialog(null, "Menu Application Opened!");
+            }
+        });
+        quit.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		Runtime.getRuntime().exit(ABORT);
+        	}
+        	
+        });
+        menu.add(fileMenu);
+        menu.add(colorTheme);
+        menu.add(history);
+        menu.add(quit);
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
     }
 
     private void addTask() {
-        String task = taskTextField.getText().trim();
-        if (!task.isEmpty()) {
-            toDoListModel.addElement(task);
-            taskTextField.setText("");
-        }
+        editTask();
     }
 
     private void removeTask() {
@@ -83,24 +110,45 @@ public class Test extends JFrame {
 
     private void editTask() {
         int selectedIndex = toDoList.getSelectedIndex();
-        if (selectedIndex != -1) {
+        
         	ArrayList <String>  list = new ArrayList<>();
         	JPanel myPanel = new JPanel();
+        	String alreadyInputTask ="";
+        	String alreadyInputDate = "";
+        	if(selectedIndex!=-1)
+        	{
+        		String original = toDoListModel.getElementAt(selectedIndex);
+        		alreadyInputTask = original.substring(0, original.indexOf("-")-1);
+        		alreadyInputDate = original.substring(original.indexOf("-")+2);
+        	}
         	JTextField editTaskInput = new JTextField(15);
         	JTextField editDate = new JTextField(15);
+        	JComboBox urgencyDropdown = new JComboBox();
         	
         	myPanel.add(new JLabel("Edit Task: "));
         	myPanel.add(editTaskInput);
         	myPanel.add(Box.createHorizontalStrut(15));
         	myPanel.add(new JLabel("Date: "));
         	myPanel.add(editDate);
+        	myPanel.add(new JLabel("Urgency: "));
+        	
+        	
+        	editTaskInput.setText(alreadyInputTask);
+        	editDate.setText(alreadyInputDate);
+        	
+        	
 
         	
             int editedTask = JOptionPane.showConfirmDialog(null, myPanel, "Yuh",JOptionPane.OK_CANCEL_OPTION);
             if (editedTask == JOptionPane.OK_OPTION) {
-                toDoListModel.setElementAt(editTaskInput.getText() + " - " + editDate.getText(), selectedIndex);
+            	if(selectedIndex!=-1)
+            		toDoListModel.setElementAt(editTaskInput.getText() + " - " + editDate.getText(), selectedIndex);
+            	else
+            		toDoListModel.addElement(editTaskInput.getText() + " - " + editDate.getText());
+                
             }
-        }
+        
+            
     }
 
     public static void main(String[] args) {
