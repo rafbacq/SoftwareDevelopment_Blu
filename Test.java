@@ -1,6 +1,8 @@
 package Software_Development;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -72,6 +74,7 @@ public class Test extends JFrame {
                 
                     if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
                     	editTask(false);
+                    	sortTableByUrgency();
                     } else if (e.getClickCount() == 2 && SwingUtilities.isRightMouseButton(e)) {
                         //do nothing
                     }
@@ -112,12 +115,14 @@ public class Test extends JFrame {
 
     private void addTask() {
         editTask(true);
+        sortTableByUrgency();
     }
 
     private void removeTask() {
         int selectedIndex = toDoTable.getSelectedRow();
         if (selectedIndex != -1) {
             tableModel.removeRow(selectedIndex);
+            sortTableByUrgency();
         }
     }
 
@@ -137,6 +142,7 @@ public class Test extends JFrame {
         
         JComboBox<String> urgencyDropdown = new JComboBox<String>();
         
+        urgencyDropdown.addItem("");
         urgencyDropdown.addItem("Urgent");
         urgencyDropdown.addItem("Current");
         urgencyDropdown.addItem("Eventual");
@@ -167,6 +173,7 @@ public class Test extends JFrame {
         editDate.setText(alreadyInputDate);
 
         int editedTask = JOptionPane.showConfirmDialog(null, myPanel, "Bruh this sucks", JOptionPane.OK_CANCEL_OPTION);
+      
         if (editedTask == JOptionPane.OK_OPTION) {
             if (selectedIndex != -1) {
                 tableModel.setValueAt(editTaskInput.getText(), selectedIndex, 0);
@@ -176,6 +183,31 @@ public class Test extends JFrame {
                 tableModel.addRow(rowData);
             }
         }
+  
+       
+    }
+    private void sortTableByUrgency() {
+        // Sort the table based on urgency
+    	tableModel.getDataVector().sort((row1, row2) -> {
+            String urgency1 = (String) row1.get(2); // Assuming urgency is at column index 2
+            String urgency2 = (String) row2.get(2);
+
+            return compareUrgency(urgency1, urgency2);
+        });
+
+        // Fire table data changed to update the view
+        tableModel.fireTableDataChanged();
+    }
+
+    private int compareUrgency(String urgency1, String urgency2) {
+        // Define the order of urgency levels
+        String[] urgencyOrder = {"Urgent", "Current", "Eventual", "Inactive"};
+
+        // Compare the indices of urgency levels
+        int index1 = Arrays.asList(urgencyOrder).indexOf(urgency1);
+        int index2 = Arrays.asList(urgencyOrder).indexOf(urgency2);
+
+        return Integer.compare(index1, index2);
     }
 
     public static void main(String[] args) {
