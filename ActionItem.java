@@ -1,6 +1,10 @@
 package dev;
 
 import java.util.Date;
+
+import javax.swing.JTextField;
+import javax.swing.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,6 +20,7 @@ public class ActionItem {
 	private int yearComplete;
 	private String name;
 	private String comments;
+	private String theme;
 	private LocalDateTime dateAdded;
 	private LocalDateTime dateComplete;
 	
@@ -31,8 +36,41 @@ public class ActionItem {
 		this.monthComplete = monthComplete;
 		this.yearComplete = yearComplete;
 		this.comments = comments;
+		this.theme = "default";
 		dateAdded = LocalDateTime.of(yearAdded, monthAdded, dayAdded, 11, 59);
 		dateComplete =  LocalDateTime.of(yearComplete, monthComplete, dayComplete, 11, 59);
+	}
+	
+	public ActionItem(String name, String status, int dayComplete, int monthComplete, int yearComplete, String comments) 
+	{
+		this.name = name;
+		this.status = status;
+		this.dayComplete = dayComplete;
+		this.monthComplete = monthComplete;
+		this.yearComplete = yearComplete;
+		this.comments = comments;
+		dateAdded = LocalDateTime.now();
+		this.dayAdded = dateAdded.getDayOfMonth();
+		this.monthAdded = dateAdded.getMonthValue();
+		this.yearAdded = dateAdded.getYear();
+		this.theme = "default";
+		dateComplete =  LocalDateTime.of(yearComplete, monthComplete, dayComplete, 11, 59);
+	}
+	
+	public ActionItem(String name) 
+	{
+		this.name = name;
+		this.status = "No Status";
+	}
+	
+	public ActionItem() 
+	{
+		this.name = "Name";
+		this.status = "No Status";
+		dateAdded = LocalDateTime.of(yearAdded, monthAdded, dayAdded, 11, 59);
+		this.dayAdded = dateAdded.getDayOfMonth();
+		this.monthAdded = dateAdded.getMonthValue();
+		this.yearAdded = dateAdded.getYear();
 	}
 	
 	public void setName(String name) 
@@ -55,6 +93,11 @@ public class ActionItem {
 		this.comments = comments;
 	}
 	
+	public void setTheme(String theme) 
+	{
+		this.theme = theme;
+	}
+	
 	public String getName() 
 	{
 		return name;
@@ -75,10 +118,29 @@ public class ActionItem {
 		return comments;
 	}	
 	
+	public String getTheme() 
+	{
+		return theme;
+	}
+	
+	public String toString() 
+	{
+		String output = "";
+		
+		output += "Task Name: " + name + "\n";
+		output += "Status: " + status + "\n";
+		output += "Date Added: " + dateAdded.toString() + "\n";
+		output += "Date to be Completed: " + dateComplete.toString() + "\n";
+		output += "Additional Comments: " + comments + "\n";
+		
+		return output;
+		
+	}
+	
 	public static void main(String[] args) 
 	{
-		System.out.println("Hello");
-		ActionItem a = new ActionItem("a", "b", 30, 1, 2024, 31, 1, 2024, "extra");
+		ActionItem a = new ActionItem("Clean my room", "Urgent", 30, 1, 2024, 31, 1, 2024, "Mom will be back home at 7:00 pm");
+		System.out.println(a.toString());
 	}
 	
 }
