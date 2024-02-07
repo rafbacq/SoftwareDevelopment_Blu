@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.Icon;
-public class MainScreen {
+public class MainScreen implements ActionListener{
  private static final float RIGHT_ALIGNMENT = 0;
 JFrame frame;
  JPanel contentPane, topPanel, middlePanel, bottomPanel;
@@ -11,6 +13,9 @@ JFrame frame;
  JButton fileMenuButton, addButton;
  JScrollPane scrollPane;
  JTextArea textArea;
+ JPanel actionsPanel = new JPanel(new GridLayout(0,1));
+ ArrayList<String> actions = new ArrayList<String>();
+ ArrayList<String> status = new ArrayList<String>();
  public MainScreen(){
 	 /* Create and set up the frame */
 	 frame = new JFrame("To Do List");
@@ -43,9 +48,10 @@ JFrame frame;
 	 middlePanel = new JPanel(new BorderLayout());
 	 textArea = new JTextArea(80,40);
 	 //textArea.setSize(30, 100);
-	 scrollPane= new JScrollPane(textArea);
+	 scrollPane= new JScrollPane(actionsPanel);
 	 //scrollPane.setPreferredSize(new Dimension(450, 110));
 	 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+	 
 	 middlePanel.add(scrollPane, BorderLayout.CENTER);
 	 contentPane.add(middlePanel, BorderLayout.CENTER);
 	 
@@ -55,6 +61,7 @@ JFrame frame;
 	 newActionText.setPreferredSize(new Dimension(200, 50));
 	 ImageIcon addImage = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/addButton.png");
 	 addButton = new JButton(addImage);
+	 addButton.addActionListener(this);
 	 addButton.setActionCommand("Add Action");
 	 addButton.setOpaque(false);
 	 addButton.setContentAreaFilled(false);
@@ -71,12 +78,49 @@ JFrame frame;
  }
  
  public void actionPerformed(ActionEvent event) {
-	
+	 String eventName = event.getActionCommand();
+	 
+	    if (eventName.equals("Add Action")) {
+	        String newActionText = this.newActionText.getText();
+	        if (!newActionText.isEmpty()) {
+	        	
+	            actions.add(newActionText);
+	            //JPanel actionPane = newAction(newActionText);
+	            JLabel label = newAction(newActionText);
+	            JLabel label1 = new JLabel(newActionText);
+	            label1.setOpaque(true);
+	            label1.setBackground(Color.PINK); // Example: Blue background color
+	            label1.setPreferredSize(new Dimension(50, 50)); // Example: Custom size
+	            label1.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+	            actionsPanel.add(label1);
+	            actionsPanel.revalidate();
+	            actionsPanel.repaint();
+	            // Append the new action text to the existing textArea
+	            //textArea.append(newActionText + "\n");
+	            //this.actionsPanel.add(label);
+	            //middlePanel.add(scrollPane, BorderLayout.CENTER);
+	            //contentPane.add(scrollPane, BorderLayout.CENTER);
+	            // Clear the newActionText field
+	            this.newActionText.setText("");
+	        }
+	    }
+	 
  }
  
  private static void runGUI() {
 	 JFrame.setDefaultLookAndFeelDecorated(true);
 	 MainScreen ms = new MainScreen();
+ }
+ 
+ public JLabel newAction(String action) {
+	 //JPanel actionPane = new JPanel(new BorderLayout());
+	 JLabel toDoAction = new JLabel(action);
+	 toDoAction.setPreferredSize(new Dimension(50,20));
+	 toDoAction.setOpaque(true);
+	 toDoAction.setBackground(Color.BLUE);
+	 actions.add(action);
+	 return toDoAction;
+	 
  }
  
  public static void main(String[] args) {
