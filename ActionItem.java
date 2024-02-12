@@ -137,10 +137,20 @@ public class ActionItem {
 		
 	}
 	
+	public String toFile() 
+	{
+		String output = "";
+		
+		output += (name + ", " + status + ", " + dateAdded + ", " + dateComplete + ", " + comments);
+	
+		return output;
+	}
+	
 	public static void main(String[] args) 
 	{
 		ActionItem a = new ActionItem("Clean my room", "Urgent", 30, 1, 2024, 31, 1, 2024, "Mom will be back home at 7:00 pm");
 		System.out.println(a.toString());
+		System.out.println(a.toFile());
 	}
 	
 }
