@@ -1,58 +1,23 @@
 package Software_Development;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.ParseException;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.swing.Box;
-import javax.swing.DropMode;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
-import javax.swing.table.DefaultTableModel;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
+import java.util.*;
 
 public class Test extends JFrame {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private JTable toDoTable;
 
     public Test() {
         setTitle("To-Do Application");
-        setSize(400, 300);
+        setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -171,7 +136,6 @@ public class Test extends JFrame {
             alreadyInputTask = tableModel.getValueAt(selectedIndex, 0).toString();
         }
         JTextField editTaskInput = new JTextField(15);
-        
 
         JComboBox<String> urgencyDropdown = new JComboBox<String>();
 
@@ -180,93 +144,75 @@ public class Test extends JFrame {
         urgencyDropdown.addItem("Current");
         urgencyDropdown.addItem("Eventual");
         urgencyDropdown.addItem("Inactive");
-        
-        UtilDateModel model = new UtilDateModel();
-        model.setDate(2020, 1, 1);
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, null);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        Date selectedDate = (Date) datePicker.getModel().getValue();
+
+        JButton selectDateButton = new JButton("Select Date");
+        JTextField dateTextField = new JTextField(10);
+        dateTextField.setEditable(false);
+
+        JPanel datePanel = new JPanel();
+        datePanel.add(dateTextField);
+        datePanel.add(selectDateButton);
 
         myPanel.add(new JLabel("Edit Task: "));
         myPanel.add(editTaskInput);
         myPanel.add(Box.createHorizontalStrut(15));
         myPanel.add(new JLabel("Date: "));
-        myPanel.add(datePicker);
+        myPanel.add(datePanel);
         myPanel.add(new JLabel("Urgency: "));
         myPanel.add(urgencyDropdown);
 
         editTaskInput.setText(alreadyInputTask);
 
-        // Initialize the date picker
-       
-        
-        int editedTask = JOptionPane.showConfirmDialog(null, myPanel, "Bruh this sucks", JOptionPane.OK_CANCEL_OPTION);
-        
+        selectDateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Date selectedDate = showDatePicker();
+                if (selectedDate != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    dateTextField.setText(sdf.format(selectedDate));
+                }
+            }
+        });
+
+        int editedTask = JOptionPane.showConfirmDialog(null, myPanel, "Edit Task", JOptionPane.OK_CANCEL_OPTION);
+
         if (editedTask == JOptionPane.OK_OPTION) {
             if (selectedIndex != -1) {
                 tableModel.setValueAt(editTaskInput.getText(), selectedIndex, 0);
-                tableModel.setValueAt(selectedDate.toString(), selectedIndex, 1);
-            } else if(b==true) {
-                Object[] rowData = {editTaskInput.getText(), selectedDate.toString(), urgencyDropdown.getSelectedItem()};
+                tableModel.setValueAt(dateTextField.getText(), selectedIndex, 1);
+                tableModel.setValueAt(urgencyDropdown.getSelectedItem(), selectedIndex, 2);
+            } else if (b == true) {
+                Object[] rowData = {editTaskInput.getText(), dateTextField.getText(), urgencyDropdown.getSelectedItem()};
                 tableModel.addRow(rowData);
             }
         }
-        
-         
-        
     }
-    public class DateLabelFormatter extends AbstractFormatter {
-    	 
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private String datePattern = "yyyy-MM-dd";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-         
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
+
+    private Date showDatePicker() {
+        Calender calendar = new Calender();
+        int result = JOptionPane.showConfirmDialog(null, calendar, "Select Date", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            return calendar.getSelectedDate();
         }
-     
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-             
-            return "";
-        }
-     
+        return null;
     }
-    
-
-    // Custom formatter for JDatePicker
-
+    public static void showMessageBox(final String strTitle, final String strMessage)
+    {
+            //Redone for larger OK button
+             JOptionPane theOptionPane = new JOptionPane(strMessage,JOptionPane.INFORMATION_MESSAGE);
+             JPanel buttonPanel = (JPanel)theOptionPane.getComponent(1);
+            // get the handle to the ok button
+            JButton buttonOk = (JButton)buttonPanel.getComponent(0);
+            // set the text
+            buttonOk.setText(" OK ");
+            buttonOk.setPreferredSize(new Dimension(100,50));  //Set Button size here
+            buttonOk.validate();
+            JDialog theDialog = theOptionPane.createDialog(null,strTitle);
+            theDialog.setVisible(true);  //present your new optionpane to the world.
+    }
 
     private void sortTableByUrgency() {
         // Sort the table based on urgency
-        tableModel.getDataVector().sort((row1, row2) -> {
-            String urgency1 = (String) row1.get(2); // Assuming urgency is at column index 2
-            String urgency2 = (String) row2.get(2);
-
-            return compareUrgency(urgency1, urgency2);
-        });
-
-        // Fire table data changed to update the view
-        tableModel.fireTableDataChanged();
-    }
-
-    private int compareUrgency(String urgency1, String urgency2) {
-        // Define the order of urgency levels
-        String[] urgencyOrder = {"Urgent", "Current", "Eventual", "Inactive"};
-
-        // Compare the indices of urgency levels
-        int index1 = Arrays.asList(urgencyOrder).indexOf(urgency1);
-        int index2 = Arrays.asList(urgencyOrder).indexOf(urgency2);
-
-        return Integer.compare(index1, index2);
     }
 
     public static void main(String[] args) {
@@ -274,36 +220,9 @@ public class Test extends JFrame {
     }
 }
 
-//class DateFormatter extends AbstractFormatter {
-//
-//    private final SimpleDateFormat dateFormatter;
-//
-//    public DateFormatter(SimpleDateFormat dateFormatter) {
-//        this.dateFormatter = dateFormatter;
-//    }
-//
-//    @Override
-//    public Object stringToValue(String text) throws ParseException {
-//        return dateFormatter.parseObject(text);
-//    }
-//
-//    @Override
-//    public String valueToString(Object value) throws ParseException {
-//        if (value instanceof Date) {
-//            return dateFormatter.format((Date) value);
-//        }
-//        return "";
-//    }
-//}
-
-// TransferHandler for handling drag-and-drop reordering
+//class ListItemTransferHandler for handling drag-and-drop reordering
 class ListItemTransferHandler extends TransferHandler {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Override
+    @Override
     protected Transferable createTransferable(JComponent c) {
         JTable sourceTable = (JTable) c;
         int row = sourceTable.getSelectedRow();
@@ -344,4 +263,3 @@ class ListItemTransferHandler extends TransferHandler {
         return false;
     }
 }
-
