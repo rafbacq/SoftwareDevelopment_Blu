@@ -57,6 +57,21 @@ public class ActionItem {
 		dateComplete =  LocalDateTime.of(yearComplete, monthComplete, dayComplete, 11, 59);
 	}
 	
+	public ActionItem(String name, String status, LocalDateTime dateAdded,  LocalDateTime dateComplete, String comments) 
+	{
+		this.name = name;
+		this.status = status;
+		this.comments = comments;
+		this.dateAdded = dateAdded;
+		this.dateComplete = dateComplete;
+		dayAdded = dateAdded.getDayOfMonth();
+		monthAdded = dateAdded.getMonthValue();
+		yearAdded = dateAdded.getYear();
+		dayComplete = dateComplete.getDayOfMonth();
+		monthComplete = dateComplete.getMonthValue();
+		yearComplete = dateComplete.getYear();
+	}
+	
 	public ActionItem(String name) 
 	{
 		this.name = name;
@@ -151,6 +166,12 @@ public class ActionItem {
 		ActionItem a = new ActionItem("Clean my room", "Urgent", 30, 1, 2024, 31, 1, 2024, "Mom will be back home at 7:00 pm");
 		System.out.println(a.toString());
 		System.out.println(a.toFile());
+		String[] b = a.toFile().split(",");
+		for(String c : b) 
+		{
+			System.out.println(c.trim());
+		}
+			
 	}
 	
 }
