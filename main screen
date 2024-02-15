@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.UtilDateModel;
 
 import javax.swing.Icon;
-public class MainScreen implements ActionListener{
+public class MainScreen implements ActionListener, MouseListener{
  private static final float RIGHT_ALIGNMENT = 0;
 JFrame frame;
  JPanel contentPane, topPanel, middlePanel, bottomPanel;
@@ -59,6 +63,7 @@ JFrame frame;
 	 bottomPanel.setBackground(Color.white);
 	 newActionText = new JTextField("New Action");
 	 newActionText.setPreferredSize(new Dimension(200, 50));
+	 newActionText.addMouseListener(this);
 	 ImageIcon addImage = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/addButton.png");
 	 addButton = new JButton(addImage);
 	 addButton.addActionListener(this);
@@ -132,4 +137,87 @@ JFrame frame;
 	 }
 	 });
 	 }
+
+@Override
+public void mouseClicked(MouseEvent e) {
+	// TODO Auto-generated method stub
+	if (e.getSource() == newActionText) {
+        addActionDialog();
+    }
+}
+
+@Override
+public void mousePressed(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void mouseReleased(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void mouseEntered(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void mouseExited(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+private void addActionDialog() {
+    JTextField actionInput = new JTextField(15);
+    JComboBox<String> urgencyDropdown = new JComboBox<>();
+    urgencyDropdown.addItem("Urgent");
+    urgencyDropdown.addItem("Current");
+    urgencyDropdown.addItem("Eventual");
+    urgencyDropdown.addItem("Inactive");
+
+    JButton selectDateButton = new JButton("Select Date");
+    JTextField dateTextField = new JTextField(10);
+    dateTextField.setEditable(false);
+
+    JPanel datePanel = new JPanel();
+    datePanel.add(dateTextField);
+    datePanel.add(selectDateButton);
+
+    JPanel myPanel = new JPanel();
+    myPanel.setLayout(new GridLayout(0, 2));
+    myPanel.add(new JLabel("Action: "));
+    myPanel.add(actionInput);
+    myPanel.add(new JLabel("Urgency: "));
+    myPanel.add(urgencyDropdown);
+    myPanel.add(new JLabel("Date: "));
+    myPanel.add(datePanel);
+
+    selectDateButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Date selectedDate = new Date();
+            if (selectedDate != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                dateTextField.setText(sdf.format(selectedDate));
+            }
+        }
+    });
+    int result = JOptionPane.showConfirmDialog(null, myPanel, "Add Action", JOptionPane.OK_CANCEL_OPTION);
+
+    if (result == JOptionPane.OK_OPTION) {
+        String newActionText = actionInput.getText();
+        if (!newActionText.isEmpty()) {
+            actions.add(newActionText);
+            JLabel label = newAction(newActionText);
+            actionsPanel.add(label);
+            actionsPanel.revalidate();
+            actionsPanel.repaint();
+            this.newActionText.setText("");
+        }
+    }
+}
  }
+
