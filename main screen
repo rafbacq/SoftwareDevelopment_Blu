@@ -4,10 +4,6 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.UtilDateModel;
-
-import javax.swing.Icon;
 public class MainScreen implements ActionListener, MouseListener{
  private static final float RIGHT_ALIGNMENT = 0;
 JFrame frame;
@@ -83,21 +79,29 @@ JFrame frame;
  }
  
  public void actionPerformed(ActionEvent event) {
-	 String eventName = event.getActionCommand();
+	 /*String eventName = event.getActionCommand();
 	 
 	    if (eventName.equals("Add Action")) {
 	        String newActionText = this.newActionText.getText();
 	        if (!newActionText.isEmpty()) {
-	        	
+	       	 	
+	        	JPanel labelPanel = new JPanel(new BorderLayout(0,10));
 	            actions.add(newActionText);
 	            //JPanel actionPane = newAction(newActionText);
-	            JLabel label = newAction(newActionText);
 	            JLabel label1 = new JLabel(newActionText);
 	            label1.setOpaque(true);
-	            label1.setBackground(Color.PINK); // Example: Blue background color
-	            label1.setPreferredSize(new Dimension(50, 50)); // Example: Custom size
+	            label1.setBackground(Color.gray); 
+	            label1.setPreferredSize(new Dimension(50, 50)); 
 	            label1.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-	            actionsPanel.add(label1);
+	            ImageIcon image = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/threebars_106419.png");
+	            fileMenuButton = new JButton(image);
+	            fileMenuButton.setActionCommand("drag");
+	       	 	fileMenuButton.setOpaque(false);
+	       	 	fileMenuButton.setContentAreaFilled(false);
+	       	 	fileMenuButton.setBorderPainted(false);
+	       	 	labelPanel.add(label1, BorderLayout.CENTER);
+	       	 	labelPanel.add(fileMenuButton, BorderLayout.WEST);
+	            actionsPanel.add(labelPanel);
 	            actionsPanel.revalidate();
 	            actionsPanel.repaint();
 	            // Append the new action text to the existing textArea
@@ -108,7 +112,7 @@ JFrame frame;
 	            // Clear the newActionText field
 	            this.newActionText.setText("");
 	        }
-	    }
+	    }*/
 	 
  }
  
@@ -118,15 +122,15 @@ JFrame frame;
  }
  
  public JLabel newAction(String action) {
-	 //JPanel actionPane = new JPanel(new BorderLayout());
-	 JLabel toDoAction = new JLabel(action);
-	 toDoAction.setPreferredSize(new Dimension(50,20));
-	 toDoAction.setOpaque(true);
-	 toDoAction.setBackground(Color.BLUE);
-	 actions.add(action);
-	 return toDoAction;
-	 
- }
+	    JLabel toDoAction = new JLabel(action);
+	    toDoAction.setPreferredSize(new Dimension(400, 20));  // Set the preferred size of the label
+	    toDoAction.setOpaque(true);
+	    toDoAction.setBackground(Color.BLUE);
+	    toDoAction.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));  // Adjust the border to provide spacing
+	    toDoAction.setHorizontalAlignment(SwingConstants.LEFT);  // Align the label to the left
+	    actions.add(action);
+	    return toDoAction;
+	}
  
  public static void main(String[] args) {
 	 /* Methods that create and show a GUI should be
@@ -212,12 +216,30 @@ private void addActionDialog() {
         if (!newActionText.isEmpty()) {
             actions.add(newActionText);
             JLabel label = newAction(newActionText);
-            actionsPanel.add(label);
+            this.newActionText.setText("");
+            JPanel labelPanel = new JPanel(new BorderLayout(0,10));
+            labelPanel.setPreferredSize(new Dimension(450, 50));
+            //JPanel actionPane = newAction(newActionText);
+            //JLabel label1 = new JLabel(newActionText);
+            label.setOpaque(true);
+            label.setBackground(Color.gray); 
+            label.setPreferredSize(new Dimension(50, 50)); 
+            label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            label.setHorizontalAlignment(SwingConstants.LEFT);  
+            ImageIcon image = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/threebars_106419.png");
+            fileMenuButton = new JButton(image);
+            fileMenuButton.setActionCommand("drag");
+       	 	fileMenuButton.setOpaque(false);
+       	 	fileMenuButton.setContentAreaFilled(false);
+       	 	fileMenuButton.setBorderPainted(false);
+       	 	labelPanel.add(label, BorderLayout.CENTER);
+       	 	labelPanel.add(fileMenuButton, BorderLayout.WEST);
+            actionsPanel.add(labelPanel);
             actionsPanel.revalidate();
             actionsPanel.repaint();
+           
             this.newActionText.setText("");
         }
     }
 }
  }
-
