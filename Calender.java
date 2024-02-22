@@ -1,4 +1,3 @@
-package Software_Development;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -84,11 +83,16 @@ public class Calender extends JPanel {
 
         // Add day labels to calendar panel
         for (int i = 0; i < 7; i++) {
-            JLabel dayLabel = new JLabel();
+            JLabel dayLabel = new JLabel(getDayOfWeekAbbreviation(calendar.get(Calendar.DAY_OF_WEEK)));
             dayLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            dayLabel.setText(getDayOfWeekAbbreviation(i));
             calendarPanel.add(dayLabel);
+
+            // Move to the next day of the week
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
         }
+
+        // Reset calendar to first day of month
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         // Add empty labels for days before the first day of the month
         for (int i = 0; i < calendar.get(Calendar.DAY_OF_WEEK) - 1; i++) {
@@ -114,6 +118,9 @@ public class Calender extends JPanel {
                 }
             });
             calendarPanel.add(dayLabel);
+
+            // Move to the next day of the week
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         // Repaint panel
