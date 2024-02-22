@@ -149,6 +149,8 @@ public void mouseExited(MouseEvent e) {
 	
 }
 
+
+
 private void addActionDialog() {
 	
     JTextField actionInput = new JTextField(15);
@@ -178,14 +180,25 @@ private void addActionDialog() {
     selectDateButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            selectedDate = new Date();
-            
-            if (selectedDate != null) {
-                sdf = new SimpleDateFormat("yyyy-MM-dd");
-                dateTextField.setText(sdf.format(selectedDate));
-            }
+        	JFrame popupFrame = new JFrame("Select Date");
+            popupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            Calender calendarPanel = new Calender();
+            calendarPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    dateTextField.setText(new SimpleDateFormat("yyyy-MM-dd").format(calendarPanel.getSelectedDate()));
+                    popupFrame.dispose();
+                }
+            });
+
+            popupFrame.getContentPane().add(calendarPanel);
+            popupFrame.pack();
+            popupFrame.setLocationRelativeTo(null);
+            popupFrame.setVisible(true);
         }
     });
+
+
 
     int result = JOptionPane.showConfirmDialog(null, myPanel, "Add Action", JOptionPane.OK_CANCEL_OPTION);
 
@@ -276,4 +289,6 @@ private void addActionDialog() {
         }
     }
 }
+
+
  }
