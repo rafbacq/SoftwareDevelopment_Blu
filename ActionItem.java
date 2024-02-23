@@ -1,4 +1,4 @@
-package dev;
+package smth;
 
 import java.util.Date;
 
@@ -156,7 +156,7 @@ public class ActionItem {
 	{
 		String output = "";
 		
-		output += (name + ", " + status + ", " + dateAdded + ", " + dateComplete + ", " + comments);
+		output += (name + "," + status + "," + dateAdded + "," + dateComplete + "," + comments + ",");
 	
 		return output;
 	}
@@ -175,4 +175,3 @@ public class ActionItem {
 	}
 	
 }
-
