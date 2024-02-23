@@ -15,8 +15,11 @@ public class Calender extends JPanel {
 
     private Calendar currentDate;
     private JLabel selectedDayLabel;
+    private JButton okButton;
+    private JTextField dateTextFieldToUpdate;
 
-    public Calender() {
+
+    public Calender(JTextField dateTextFieldToUpdate) {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(400, 300));
 
@@ -54,6 +57,23 @@ public class Calender extends JPanel {
                 updateCalendar();
             }
         });
+        
+        okButton = new JButton("OK");
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get the selected date and update the dateTextField
+                dateTextFieldToUpdate.setText(new SimpleDateFormat("yyyy-MM-dd").format(getSelectedDate()));
+                // Close the calendar
+                Container container = okButton.getTopLevelAncestor();
+                if (container instanceof JPopupMenu) {
+                    ((JPopupMenu) container).setVisible(false);
+                }
+            }
+        });
+
+        // Add the "OK" button to the calendar panel
+        add(okButton, BorderLayout.SOUTH);
     }
 
     private JPanel createHeaderPanel() {
@@ -115,6 +135,9 @@ public class Calender extends JPanel {
                     selectedDayLabel.setBorder(new LineBorder(Color.RED, 2));
                     // Update current date to selected date
                     currentDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dayLabel.getText()));
+                    
+                    // Set the selectedDate to the current date
+                    Date selectedDate = currentDate.getTime();
                 }
             });
             calendarPanel.add(dayLabel);
@@ -150,14 +173,11 @@ public class Calender extends JPanel {
     }
 
     public Date getSelectedDate() {
-        return currentDate.getTime();
-    }
+    	return (selectedDayLabel != null) ? currentDate.getTime() : null;    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Da Calender");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(new Calender());
-        frame.pack();
-        frame.setVisible(true);
+        
     }
 }
