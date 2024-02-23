@@ -19,6 +19,7 @@ JFrame frame;
  ArrayList<String> actions = new ArrayList<String>();
  ArrayList<String> status = new ArrayList<String>();
  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+ String date;
  Date selectedDate;
  public MainScreen(){
 	 /* Create and set up the frame */
@@ -91,8 +92,8 @@ JFrame frame;
 	 MainScreen ms = new MainScreen();
  }
  
- public JLabel newAction(String action, SimpleDateFormat sdf) {
-	 	String text = new String(action + " " + sdf.format(selectedDate));
+ public JLabel newAction(String action, String date) {
+	 	String text = new String(action + " " + date);
 	    JLabel toDoAction = new JLabel(text);
 	    toDoAction.setPreferredSize(new Dimension(400, 20));  // Set the preferred size of the label
 	    toDoAction.setOpaque(true);
@@ -181,7 +182,6 @@ private void addActionDialog() {
     JPanel calendarContainer = new JPanel();
     calendarContainer.setLayout(new BorderLayout());
     calendarContainer.add(calendarPanel, BorderLayout.CENTER);
-
     // Create a popup for the calendar
     JPopupMenu calendarPopup = new JPopupMenu();
     calendarPopup.add(calendarContainer);
@@ -214,6 +214,10 @@ private void addActionDialog() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     selectedDate = calendarPanel.getSelectedDate();
+                    dateTextField.setText(sdf.format(selectedDate));
+                    System.out.println("date " + dateTextField.getText());
+                    date = dateTextField.getText();
+                    //sdf = sdf.format(selectedDate);
                 }
             });
         }
@@ -227,7 +231,8 @@ private void addActionDialog() {
         String newActionText = actionInput.getText();
         if (!newActionText.isEmpty()) {
             actions.add(newActionText);
-            JLabel label = newAction(newActionText, sdf);
+            date = dateTextField.getText();
+            JLabel label = newAction(newActionText,date);
             String selectedUrgency = (String) urgencyDropdown.getSelectedItem();
             switch (selectedUrgency) {
                 case "Urgent":
