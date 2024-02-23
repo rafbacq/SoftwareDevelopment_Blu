@@ -4,10 +4,7 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+
 
 public class MainScreen implements ActionListener, MouseListener{
  private static final float RIGHT_ALIGNMENT = 0;
@@ -152,8 +149,7 @@ public void mouseExited(MouseEvent e) {
 
 
 private void addActionDialog() {
-	
-    JTextField actionInput = new JTextField(15);
+	JTextField actionInput = new JTextField(15);
     JComboBox<String> urgencyDropdown = new JComboBox<>();
     urgencyDropdown.addItem("Urgent");
     urgencyDropdown.addItem("Current");
@@ -177,24 +173,49 @@ private void addActionDialog() {
     myPanel.add(new JLabel("Date: "));
     myPanel.add(datePanel);
 
+    // Create the PopupCalendar
+    Calender calendarPanel = new Calender(dateTextField);
+    selectedDate = calendarPanel.getSelectedDate();
+
+    // Create a panel to hold the calendar
+    JPanel calendarContainer = new JPanel();
+    calendarContainer.setLayout(new BorderLayout());
+    calendarContainer.add(calendarPanel, BorderLayout.CENTER);
+
+    // Create a popup for the calendar
+    JPopupMenu calendarPopup = new JPopupMenu();
+    calendarPopup.add(calendarContainer);
+
+    // Add an ActionListener to the "Select Date" button
+ // Inside addActionDialog method
     selectDateButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-        	JFrame popupFrame = new JFrame("Select Date");
-            popupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            // Create the PopupCalendar
+            Calender calendarPanel = new Calender(dateTextField);
 
-            Calender calendarPanel = new Calender();
-            calendarPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    dateTextField.setText(new SimpleDateFormat("yyyy-MM-dd").format(calendarPanel.getSelectedDate()));
-                    popupFrame.dispose();
+            // Create a panel to hold the calendar
+            JPanel calendarContainer = new JPanel();
+            calendarContainer.setLayout(new BorderLayout());
+            calendarContainer.add(calendarPanel, BorderLayout.CENTER);
+
+            // Create a popup for the calendar
+            JPopupMenu calendarPopup = new JPopupMenu();
+            calendarPopup.add(calendarContainer);
+
+            // Add an ActionListener to the "Select Date" button
+            selectDateButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    calendarPopup.show(selectDateButton, 0, selectDateButton.getHeight());
                 }
             });
-
-            popupFrame.getContentPane().add(calendarPanel);
-            popupFrame.pack();
-            popupFrame.setLocationRelativeTo(null);
-            popupFrame.setVisible(true);
+            calendarPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    selectedDate = calendarPanel.getSelectedDate();
+                }
+            });
         }
     });
 
