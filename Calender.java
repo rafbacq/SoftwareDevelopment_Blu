@@ -17,6 +17,7 @@ public class Calender extends JPanel {
     private JLabel selectedDayLabel;
     private JButton okButton;
     private JTextField dateTextFieldToUpdate;
+    private Date selectedDate;
 
 
     public Calender(JTextField dateTextFieldToUpdate) {
@@ -26,13 +27,11 @@ public class Calender extends JPanel {
         // Initialize current date to today
         currentDate = Calendar.getInstance();
 
-        // Create components
         prevMonthButton = new JButton("<");
         nextMonthButton = new JButton(">");
         monthYearLabel = new JLabel();
         calendarPanel = new JPanel(new GridLayout(0, 7));
-
-        // Add components to panel
+        selectedDate = currentDate.getTime();
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(calendarPanel, BorderLayout.CENTER);
 
@@ -62,9 +61,10 @@ public class Calender extends JPanel {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Get the selected date and update the dateTextField
                 dateTextFieldToUpdate.setText(new SimpleDateFormat("yyyy-MM-dd").format(getSelectedDate()));
-                // Close the calendar
+                System.out.println(dateTextFieldToUpdate.getText());
+                selectedDate = getSelectedDate();
+                System.out.println(selectedDate);
                 Container container = okButton.getTopLevelAncestor();
                 if (container instanceof JPopupMenu) {
                     ((JPopupMenu) container).setVisible(false);
@@ -72,7 +72,6 @@ public class Calender extends JPanel {
             }
         });
 
-        // Add the "OK" button to the calendar panel
         add(okButton, BorderLayout.SOUTH);
     }
 
@@ -88,17 +87,13 @@ public class Calender extends JPanel {
     private void updateCalendar() {
         calendarPanel.removeAll();
 
-        // Update month and year label
         monthYearLabel.setText(monthYearFormat.format(currentDate.getTime()));
 
-        // Set calendar to first day of current month
         Calendar calendar = (Calendar) currentDate.clone();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        // Calculate the number of days in the month
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        // Set calendar to first day of week
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
         // Add day labels to calendar panel
@@ -107,11 +102,9 @@ public class Calender extends JPanel {
             dayLabel.setHorizontalAlignment(SwingConstants.CENTER);
             calendarPanel.add(dayLabel);
 
-            // Move to the next day of the week
             calendar.add(Calendar.DAY_OF_WEEK, 1);
         }
 
-        // Reset calendar to first day of month
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         // Add empty labels for days before the first day of the month
@@ -126,27 +119,21 @@ public class Calender extends JPanel {
             dayLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    // Reset border of previously selected day label
                     if (selectedDayLabel != null) {
                         selectedDayLabel.setBorder(null);
                     }
-                    // Highlight the selected day label
                     selectedDayLabel = dayLabel;
                     selectedDayLabel.setBorder(new LineBorder(Color.RED, 2));
-                    // Update current date to selected date
                     currentDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dayLabel.getText()));
                     
-                    // Set the selectedDate to the current date
-                    Date selectedDate = currentDate.getTime();
+                    selectedDate = currentDate.getTime();
                 }
             });
             calendarPanel.add(dayLabel);
 
-            // Move to the next day of the week
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        // Repaint panel
         calendarPanel.revalidate();
         calendarPanel.repaint();
     }
@@ -173,10 +160,10 @@ public class Calender extends JPanel {
     }
 
     public Date getSelectedDate() {
-    	return (selectedDayLabel != null) ? currentDate.getTime() : null;    }
+    	return selectedDate;    }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Da Calender");
+        JFrame frame = new JFrame("Calendar");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }
