@@ -1,7 +1,8 @@
 package Software_Development;
+
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -14,6 +15,8 @@ public class Test extends JFrame {
 
     private DefaultTableModel tableModel;
     private JTable toDoTable;
+    private String color;
+    private String currentFile;
 
     public Test() {
         setTitle("To-Do Application");
@@ -40,6 +43,14 @@ public class Test extends JFrame {
         toDoTable.setDragEnabled(true);
         toDoTable.setDropMode(DropMode.INSERT);
         toDoTable.setTransferHandler(new ListItemTransferHandler());
+
+        // Add FocusListener to clear selection when table loses focus
+        toDoTable.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                toDoTable.clearSelection();
+            }
+        });
 
         // Set layout manager
         setLayout(new BorderLayout());
@@ -69,6 +80,7 @@ public class Test extends JFrame {
                 } else if (e.getClickCount() == 2 && SwingUtilities.isRightMouseButton(e)) {
                     // do nothing
                 }
+
             }
         });
 
@@ -78,20 +90,50 @@ public class Test extends JFrame {
 
         JMenuItem fileMenu = new JMenuItem("File Menu");
         JMenuItem colorTheme = new JMenuItem("colorTheme");
-        JMenuItem history = new JMenuItem("history");
         JMenuItem quit = new JMenuItem("quit");
+
 
         fileMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open your menu application here
-                JOptionPane.showMessageDialog(null, "Menu Application Opened!");
+                FileMenu fileSystem = new FileMenu();
+                int result = JOptionPane.showConfirmDialog(null,  fileSystem, "Select File", JOptionPane.OK_CANCEL_OPTION);
+                if(result == JOptionPane.OK_OPTION) {
+                	currentFile = fileSystem.getFile();
+                }
+                
+                
             }
         });
         colorTheme.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add your color theme logic here
+                ColorTheme background = new ColorTheme();
+                int result = JOptionPane.showConfirmDialog(null, background, "Select Background", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    color = background.getColorTheme();
+                }
+                switch (color) {
+                    case "Love":
+                        getContentPane().setBackground(new Color(240, 182, 213));
+                        break;
+                    case "Halloween":
+                        getContentPane().setBackground(Color.BLACK);
+                        break;
+                    case "Winter":
+                        getContentPane().setBackground(new Color(173, 216, 230));
+                        break;
+                    case "Dark mode":
+                        getContentPane().setBackground(Color.BLACK);
+                        break;
+                    case "Pastel":
+                        getContentPane().setBackground(new Color(212, 231, 197));
+                        break;
+                    case "Default":
+                        getContentPane().setBackground(null);
+                        break;
+                }
+
             }
         });
         quit.addActionListener(new ActionListener() {
@@ -100,15 +142,9 @@ public class Test extends JFrame {
                 System.exit(0);
             }
         });
-        history.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Add your history logic here
-            }
-        });
+        
         menu.add(fileMenu);
         menu.add(colorTheme);
-        menu.add(history);
         menu.add(quit);
         menuBar.add(menu);
         setJMenuBar(menuBar);
@@ -196,31 +232,29 @@ public class Test extends JFrame {
         }
         return null;
     }
-    public static void showMessageBox(final String strTitle, final String strMessage)
-    {
-            //Redone for larger OK button
-             JOptionPane theOptionPane = new JOptionPane(strMessage,JOptionPane.INFORMATION_MESSAGE);
-             JPanel buttonPanel = (JPanel)theOptionPane.getComponent(1);
-            // get the handle to the ok button
-            JButton buttonOk = (JButton)buttonPanel.getComponent(0);
-            // set the text
-            buttonOk.setText(" OK ");
-            buttonOk.setPreferredSize(new Dimension(100,50));  //Set Button size here
-            buttonOk.validate();
-            JDialog theDialog = theOptionPane.createDialog(null,strTitle);
-            theDialog.setVisible(true);  //present your new optionpane to the world.
-    }
 
     private void sortTableByUrgency() {
         // Sort the table based on urgency
     }
 
+    private static void runGUI() {
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        Test testFrame = new Test();
+        testFrame.setVisible(true); // Make the frame visible
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Test().setVisible(true));
+        /* Methods that create and show a GUI should be
+         run from an event-dispatching thread */
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                runGUI();
+            }
+        });
     }
 }
 
-//class ListItemTransferHandler for handling drag-and-drop reordering
+// class ListItemTransferHandler for handling drag-and-drop reordering
 class ListItemTransferHandler extends TransferHandler {
     @Override
     protected Transferable createTransferable(JComponent c) {
