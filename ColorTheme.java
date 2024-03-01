@@ -141,7 +141,7 @@ public class ColorTheme implements ActionListener {
        private final ArrayList<FallingObject> fallingObjects;
        private final Timer timer;
        private FallingObjectType fallingObjectType;
-       private static final int DELAY = 50; // Delay in milliseconds
+       private static final int DELAY = 100; // Delay in milliseconds
        public FallingObjectsPanel() {
            fallingObjects = new ArrayList<>();
            timer = new Timer(DELAY, new FallingObjectsListener());
@@ -227,8 +227,9 @@ public class ColorTheme implements ActionListener {
        }
        @Override
        public void draw(Graphics g) {
-           g.setColor(Color.RED);
-           g.fillOval(x, y, SIZE, SIZE);
+           ImageIcon heart = new ImageIcon(getClass().getResource("fallingHeart.png"));
+           Image image = heart.getImage();
+           g.drawImage(image, x,y, SIZE,SIZE, null);
        }
    }
    static class Spider extends FallingObject {
@@ -242,8 +243,9 @@ public class ColorTheme implements ActionListener {
        }
        @Override
        public void draw(Graphics g) {
-           g.setColor(Color.ORANGE); // Change color to orange
-           g.fillOval(x, y, SIZE, SIZE);
+    	   ImageIcon heart = new ImageIcon(getClass().getResource("fallingScarySpider.jpg"));
+           Image image = heart.getImage();
+           g.drawImage(image, x,y, SIZE,SIZE, null);
        }
    }
    static class Snowflake extends FallingObject {
@@ -257,8 +259,9 @@ public class ColorTheme implements ActionListener {
        }
        @Override
        public void draw(Graphics g) {
-           g.setColor(Color.WHITE);
-           g.fillOval(x, y, SIZE, SIZE);
+    	   ImageIcon heart = new ImageIcon(getClass().getResource("fallingSnowflake.jpg"));
+           Image image = heart.getImage();
+           g.drawImage(image, x,y, SIZE,SIZE, null);
        }
    }
 }
