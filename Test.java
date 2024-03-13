@@ -1,5 +1,4 @@
-package Software_Development;
-
+package smth;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -9,6 +8,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Test extends JFrame {
@@ -17,6 +17,7 @@ public class Test extends JFrame {
     private JTable toDoTable;
     private String color;
     private String currentFile;
+    private FileMenu fileMenuReal;
 
     public Test() {
         setTitle("To-Do Application");
@@ -37,7 +38,9 @@ public class Test extends JFrame {
         }
         JButton addButton = new JButton("Add Task");
         JButton removeButton = new JButton("Remove Task");
-
+        
+        fileMenuReal = new FileMenu();
+        		
         // Enable table selection and drag-and-drop
         toDoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         toDoTable.setDragEnabled(true);
@@ -95,8 +98,11 @@ public class Test extends JFrame {
 
         fileMenu.addActionListener(new ActionListener() {
             @Override
+            
+            //FIX
+            
             public void actionPerformed(ActionEvent e) {
-                FileMenu fileSystem = new FileMenu();
+                FileMenu fileSystem = fileMenuReal;
                 int result = JOptionPane.showConfirmDialog(null,  fileSystem, "Select File", JOptionPane.OK_CANCEL_OPTION);
                 if(result == JOptionPane.OK_OPTION) {
                 	currentFile = fileSystem.getFile();
@@ -153,6 +159,7 @@ public class Test extends JFrame {
     private void addTask() {
         editTask(true);
         sortTableByUrgency();
+        
     }
 
     private void removeTask() {
@@ -217,9 +224,33 @@ public class Test extends JFrame {
                 tableModel.setValueAt(editTaskInput.getText(), selectedIndex, 0);
                 tableModel.setValueAt(dateTextField.getText(), selectedIndex, 1);
                 tableModel.setValueAt(urgencyDropdown.getSelectedItem(), selectedIndex, 2);
+                LocalDateTime currentDate = LocalDateTime.now();
+                ActionItem a = new ActionItem(editTaskInput.getText(), urgencyDropdown.getSelectedItem().toString(), 
+                		LocalDateTime.of(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth(), currentDate.getHour(), currentDate.getMinute()),
+                		LocalDateTime.of(Integer.parseInt(dateTextField.getText().substring(0, 4)), Integer.parseInt(dateTextField.getText().substring(5, 7)), Integer.parseInt(dateTextField.getText().substring(8)), 11, 59), "");
+                ActionItem updatedActionItem = fileMenuReal.getActionItemList().get(selectedIndex);
+                updatedActionItem.setName(a.getName());
+                updatedActionItem.setStatus(a.getStatus());
+                updatedActionItem.setDate(a.getDate());
+                updatedActionItem.setComments(a.getComments());
+                System.out.println(updatedActionItem.toFile());
+                System.out.println("Action Item Updated");
+                System.out.println(fileMenuReal.getActionItemList().size());
             } else if (b == true) {
                 Object[] rowData = {editTaskInput.getText(), dateTextField.getText(), urgencyDropdown.getSelectedItem()};
                 tableModel.addRow(rowData);
+                LocalDateTime currentDate = LocalDateTime.now();
+                ActionItem a = new ActionItem(editTaskInput.getText(), urgencyDropdown.getSelectedItem().toString(), 
+                		LocalDateTime.of(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth(), currentDate.getHour(), currentDate.getMinute()),
+                		LocalDateTime.of(Integer.parseInt(dateTextField.getText().substring(0, 4)), Integer.parseInt(dateTextField.getText().substring(5, 7)), Integer.parseInt(dateTextField.getText().substring(8)), 11, 59), "");
+                fileMenuReal.addItem(a);
+                System.out.println(a.toFile());
+                System.out.println("Action Item Added");
+                System.out.println(fileMenuReal.getActionItemList().size());
+                System.out.println(fileMenuReal.getActionItemList());
+
+                
+                
             }
         }
     }
@@ -241,6 +272,11 @@ public class Test extends JFrame {
         JFrame.setDefaultLookAndFeelDecorated(true);
         Test testFrame = new Test();
         testFrame.setVisible(true); // Make the frame visible
+    }
+    
+    public FileMenu getFileMenu()
+    {
+    	return fileMenuReal;
     }
 
     public static void main(String[] args) {
