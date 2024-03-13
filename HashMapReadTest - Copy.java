@@ -5,7 +5,7 @@ package Software_Development;
 
 import java.io.*; 
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.Date;
 import java.time.*;
 
 public class HashMapReadTest { 
@@ -13,15 +13,15 @@ public class HashMapReadTest {
 	//File path where the versions are being read from
 	
 	
-	public static void main(String[] args) 
+	public HashMapReadTest()
 	{ 
 		// read text file to HashMap 
-		Map<Integer, ArrayList<ActionItem>> mapFromFile 
+		Map<Integer, ActionItem[]> mapFromFile 
 			= HashMapFromTextFile(); 
 		
 
 		// iterate over HashMap entries 
-		for (Map.Entry<Integer, ArrayList<ActionItem>> entry : 
+		for (Map.Entry<Integer, ActionItem[]> entry : 
 			mapFromFile.entrySet()) { 
 			System.out.println("Version" + entry.getKey() + ":");
 			for(ActionItem a : entry.getValue()) 
@@ -30,15 +30,19 @@ public class HashMapReadTest {
 			}
 		} 
 	} 
+	public static void main(String [] args)
+	{
+		System.out.println("Look this works");
+	}
 	public String getHistory()
 	{ 
 		// read text file to HashMap 
-		Map<Integer, ArrayList<ActionItem>> mapFromFile 
+		Map<Integer, ActionItem[]> mapFromFile 
 			= HashMapFromTextFile(); 
 		String finalString = "";
 
 		// iterate over HashMap entries 
-		for (Entry<Integer, ArrayList<ActionItem>> entry : 
+		for (Map.Entry<Integer, ActionItem[]> entry : 
 			mapFromFile.entrySet()) { 
 			System.out.println("Version" + entry.getKey() + ":");
 			for(ActionItem a : entry.getValue()) 
@@ -52,12 +56,12 @@ public class HashMapReadTest {
 	/*
 	 * Returns a map of the keys and according values as written in the file
 	 * */
-	public static Map<Integer, ArrayList<ActionItem>> HashMapFromTextFile() 
+	public static Map<Integer, ActionItem[]> HashMapFromTextFile() 
 	{ 
 		
 		//Creates map that will be returned
-		Map<Integer, ArrayList<ActionItem>> map 
-			= new HashMap<Integer, ArrayList<ActionItem>>(); 
+		Map<Integer, ActionItem[]> map 
+			= new HashMap<Integer, ActionItem[]>(); 
 			
 		//Initialize Buffered Reader to read file
 		BufferedReader br = null; 
@@ -131,7 +135,13 @@ public class HashMapReadTest {
 						
 						count = count + 1;
 					}
-					map.put(versionNumber, actionItems);
+					ActionItem[] actionItemsList = new ActionItem[actionItems.size()];
+					for(int i = 0; i < actionItems.size(); i++) 
+					{
+						ActionItem a = new ActionItem(actionItems.get(i).getName(), actionItems.get(i).getStatus(), actionItems.get(i).getDate(), actionItems.get(i).getDate(), actionItems.get(i).getComments());
+						actionItemsList[i] = a;
+					}
+					map.put(versionNumber, actionItemsList);
 				}
 		} 
 		catch (Exception e) { 
