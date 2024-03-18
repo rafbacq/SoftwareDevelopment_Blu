@@ -9,7 +9,8 @@ import java.util.Map.Entry;
 import java.time.*;
 
 public class HashMapReadTest { 
-	
+	static String outputFilePath = "version.txt";
+	File file = new File(outputFilePath);
 	//File path where the versions are being read from
 	
 	
@@ -116,6 +117,11 @@ public class HashMapReadTest {
 						
 						String dateAddedString = actionItemElements[newIndex - 2];
 						String[] dateAddedComponents = dateAddedString.split("-");
+						
+						for(String s : dateAddedComponents) 
+						{
+							System.out.println(s);
+						}
 						
 						day = ((dateAddedComponents[2].charAt(0) - 48) * 10) + (dateAddedComponents[2].charAt(1) - 48);
 

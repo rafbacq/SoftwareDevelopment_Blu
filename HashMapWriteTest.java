@@ -45,8 +45,8 @@ public class HashMapWriteTest {
             for (int i: map.keySet()) {
             	if (map != null) 
             	{
-            		bf.write("V" + i + " -- " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
-            		System.out.println("V" + i + " -- " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
+            		bf.write("V" + i + " ~~ " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
+            		System.out.println("V" + i + " ~~ " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
 	            	for(ActionItem item : map.get(i)) 
 	            	{
 	            		bf.write(item.toFile() + "\n");
