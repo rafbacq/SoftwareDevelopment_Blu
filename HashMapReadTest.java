@@ -1,3 +1,4 @@
+
 package Software_Development;
 
 //Java program to reading 
@@ -5,23 +6,24 @@ package Software_Development;
 
 import java.io.*; 
 import java.util.*;
-import java.util.Date;
+import java.util.Map.Entry;
 import java.time.*;
 
 public class HashMapReadTest { 
-	
+	static String outputFilePath = "version.txt";
+	File file = new File(outputFilePath);
 	//File path where the versions are being read from
 	
 	
-	public HashMapReadTest()
+	public static void main(String[] args) 
 	{ 
 		// read text file to HashMap 
-		Map<Integer, ActionItem[]> mapFromFile 
+		Map<Integer, ArrayList<ActionItem>> mapFromFile 
 			= HashMapFromTextFile(); 
 		
 
 		// iterate over HashMap entries 
-		for (Map.Entry<Integer, ActionItem[]> entry : 
+		for (Map.Entry<Integer, ArrayList<ActionItem>> entry : 
 			mapFromFile.entrySet()) { 
 			System.out.println("Version" + entry.getKey() + ":");
 			for(ActionItem a : entry.getValue()) 
@@ -30,19 +32,15 @@ public class HashMapReadTest {
 			}
 		} 
 	} 
-	public static void main(String [] args)
-	{
-		System.out.println("Look this works");
-	}
 	public String getHistory()
 	{ 
 		// read text file to HashMap 
-		Map<Integer, ActionItem[]> mapFromFile 
+		Map<Integer, ArrayList<ActionItem>> mapFromFile 
 			= HashMapFromTextFile(); 
 		String finalString = "";
 
 		// iterate over HashMap entries 
-		for (Map.Entry<Integer, ActionItem[]> entry : 
+		for (Entry<Integer, ArrayList<ActionItem>> entry : 
 			mapFromFile.entrySet()) { 
 			System.out.println("Version" + entry.getKey() + ":");
 			for(ActionItem a : entry.getValue()) 
@@ -56,12 +54,12 @@ public class HashMapReadTest {
 	/*
 	 * Returns a map of the keys and according values as written in the file
 	 * */
-	public static Map<Integer, ActionItem[]> HashMapFromTextFile() 
+	public static Map<Integer, ArrayList<ActionItem>> HashMapFromTextFile() 
 	{ 
 		
 		//Creates map that will be returned
-		Map<Integer, ActionItem[]> map 
-			= new HashMap<Integer, ActionItem[]>(); 
+		Map<Integer, ArrayList<ActionItem>> map 
+			= new HashMap<Integer, ArrayList<ActionItem>>(); 
 			
 		//Initialize Buffered Reader to read file
 		BufferedReader br = null; 
@@ -121,6 +119,11 @@ public class HashMapReadTest {
 						String dateAddedString = actionItemElements[newIndex - 2];
 						String[] dateAddedComponents = dateAddedString.split("-");
 						
+						for(String s : dateAddedComponents) 
+						{
+							System.out.println(s);
+						}
+						
 						day = ((dateAddedComponents[2].charAt(0) - 48) * 10) + (dateAddedComponents[2].charAt(1) - 48);
 
 						LocalDateTime dateAdded = LocalDateTime.of(Integer.parseInt(dateAddedComponents[0]), Integer.parseInt(dateAddedComponents[1]), 
@@ -135,13 +138,7 @@ public class HashMapReadTest {
 						
 						count = count + 1;
 					}
-					ActionItem[] actionItemsList = new ActionItem[actionItems.size()];
-					for(int i = 0; i < actionItems.size(); i++) 
-					{
-						ActionItem a = new ActionItem(actionItems.get(i).getName(), actionItems.get(i).getStatus(), actionItems.get(i).getDate(), actionItems.get(i).getDate(), actionItems.get(i).getComments());
-						actionItemsList[i] = a;
-					}
-					map.put(versionNumber, actionItemsList);
+					map.put(versionNumber, actionItems);
 				}
 		} 
 		catch (Exception e) { 
