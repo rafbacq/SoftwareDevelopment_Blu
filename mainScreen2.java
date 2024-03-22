@@ -1,0 +1,322 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+
+public class MainScreen extends JPanel implements ActionListener, MouseListener{
+ private static final float RIGHT_ALIGNMENT = 0;
+JFrame frame;
+ JPanel contentPane, topPanel, middlePanel, bottomPanel;
+ JLabel title;
+ JButton newActionButton;
+ JButton fileMenuButton, addButton;
+ JScrollPane scrollPane;
+ JTextArea textArea;
+ JPanel actionsPanel = new JPanel();
+ ArrayList<String> actions = new ArrayList<String>();
+ ArrayList<String> status = new ArrayList<String>();
+ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+ String date;
+ Date selectedDate;
+ public MainScreen(){
+	 /* Create and set up the frame */
+	 frame = new JFrame("To Do List");
+	 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 //frame.setSize(600,800);
+	 frame.setBackground(Color.BLUE);
+	 /* Create content pane with a GridLayout and empty borders */
+	 contentPane = new JPanel();
+	 contentPane.setLayout(new BorderLayout(0, 10));
+	 contentPane.setPreferredSize(new Dimension(600, 800));
+
+	 contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	 contentPane.setBackground(new Color(173, 216, 230));
+	 actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.Y_AXIS));
+	 topPanel = new JPanel(new BorderLayout());
+	 ImageIcon fileImage = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/menu_456243 (3).png");
+	 fileMenuButton = new JButton(fileImage);
+	 fileMenuButton.setActionCommand("File");
+	 fileMenuButton.setOpaque(false);
+	 fileMenuButton.setContentAreaFilled(false);
+	 fileMenuButton.setBorderPainted(false);
+	
+	 
+	 title = new JLabel("To-Do List");
+	 title.setFont(new Font("Serif", Font.BOLD, 20));
+	 topPanel.add(fileMenuButton, BorderLayout.EAST);
+	 topPanel.add(title, BorderLayout.CENTER);
+	 contentPane.add(topPanel, BorderLayout.NORTH);
+
+	 middlePanel = new JPanel(new BorderLayout());
+	 textArea = new JTextArea(80,40);
+	 //textArea.setSize(30, 100);
+	 scrollPane= new JScrollPane(actionsPanel);
+	 //scrollPane.setPreferredSize(new Dimension(450, 110));
+	 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+	 
+	 middlePanel.add(scrollPane, BorderLayout.CENTER);
+	 contentPane.add(middlePanel, BorderLayout.CENTER);
+	 
+	 bottomPanel = new JPanel(new BorderLayout());
+	 bottomPanel.setBackground(Color.white);
+	 newActionButton = new JButton("New Action");
+	 newActionButton.setPreferredSize(new Dimension(200, 50));
+	 newActionButton.addMouseListener(this);
+	 ImageIcon addImage = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/addButton.png");
+	 addButton = new JButton(addImage);
+	 addButton.addActionListener(this);
+	 addButton.setActionCommand("Add Action");
+	 addButton.setOpaque(false);
+	 addButton.setContentAreaFilled(false);
+	 addButton.setBorderPainted(false);
+	 //bottomPanel.add(addButton, BorderLayout.EAST);
+	 bottomPanel.add(newActionButton, BorderLayout.CENTER);
+	 contentPane.add(bottomPanel, BorderLayout.SOUTH);
+	 
+ 	/* Add content pane to frame */
+	 frame.setContentPane(contentPane);
+	 /* Size and then display the frame. */
+	 frame.pack();
+	 frame.setVisible(true);
+ }
+ 
+ public void actionPerformed(ActionEvent event) {
+	
+ }
+ 
+ private static void runGUI() {
+	 JFrame.setDefaultLookAndFeelDecorated(true);
+	 MainScreen ms = new MainScreen();
+ }
+ 
+ public JLabel newAction(String action, String date) {
+	 	String text = new String(action + " " + date);
+	    JLabel toDoAction = new JLabel(text);
+	    toDoAction.setPreferredSize(new Dimension(400, 20));  // Set the preferred size of the label
+	    toDoAction.setOpaque(true);
+	    toDoAction.setBackground(Color.BLUE);
+	    toDoAction.setFont(new Font("Serif", Font.PLAIN, 20));
+	    toDoAction.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));  // Adjust the border to provide spacing
+	    toDoAction.setHorizontalAlignment(SwingConstants.LEFT);  // Align the label to the left
+	    actions.add(action);
+	    return toDoAction;
+	}
+ 
+ public static void main(String[] args) {
+	 /* Methods that create and show a GUI should be
+	 run from an event-dispatching thread */
+	 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	 public void run() {
+	 runGUI();
+	 }
+	 });
+	 }
+
+@Override
+public void mouseClicked(MouseEvent e) {
+	// TODO Auto-generated method stub
+	if (e.getSource() == newActionButton) {
+        addActionDialog();
+    }
+}
+
+@Override
+public void mousePressed(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void mouseReleased(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void mouseEntered(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void mouseExited(MouseEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+private void addActionDialog() {
+	JTextField actionInput = new JTextField(15);
+    JComboBox<String> urgencyDropdown = new JComboBox<>();
+    urgencyDropdown.addItem("Urgent");
+    urgencyDropdown.addItem("Current");
+    urgencyDropdown.addItem("Eventual");
+    urgencyDropdown.addItem("Inactive");
+
+    JButton selectDateButton = new JButton("Select Date");
+    JTextField dateTextField = new JTextField(10);
+    dateTextField.setEditable(false);
+
+    JPanel datePanel = new JPanel();
+    datePanel.add(dateTextField);
+    datePanel.add(selectDateButton);
+
+    JPanel myPanel = new JPanel();
+    myPanel.setLayout(new GridLayout(0, 2));
+    myPanel.add(new JLabel("Action: "));
+    myPanel.add(actionInput);
+    myPanel.add(new JLabel("Urgency: "));
+    myPanel.add(urgencyDropdown);
+    myPanel.add(new JLabel("Date: "));
+    myPanel.add(datePanel);
+
+    // Create the PopupCalendar
+    Calender2 calendarPanel = new Calender2(dateTextField);
+    selectedDate = calendarPanel.getSelectedDate();
+
+    // Create a panel to hold the calendar
+    JPanel calendarContainer = new JPanel();
+    calendarContainer.setLayout(new BorderLayout());
+    calendarContainer.add(calendarPanel, BorderLayout.CENTER);
+    // Create a popup for the calendar
+    JPopupMenu calendarPopup = new JPopupMenu();
+    calendarPopup.add(calendarContainer);
+
+    // Add an ActionListener to the "Select Date" button
+ // Inside addActionDialog method
+    selectDateButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Create the PopupCalendar
+            Calender2 calendarPanel = new Calender2(dateTextField);
+
+            // Create a panel to hold the calendar
+            JPanel calendarContainer = new JPanel();
+            calendarContainer.setLayout(new BorderLayout());
+            calendarContainer.add(calendarPanel, BorderLayout.CENTER);
+
+            // Create a popup for the calendar
+            JPopupMenu calendarPopup = new JPopupMenu();
+            calendarPopup.add(calendarContainer);
+
+            // Add an ActionListener to the "Select Date" button
+            selectDateButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    calendarPopup.show(selectDateButton, 0, selectDateButton.getHeight());
+                }
+            });
+            calendarPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    selectedDate = calendarPanel.getSelectedDate();
+                    dateTextField.setText(sdf.format(selectedDate));
+                    System.out.println("date " + dateTextField.getText());
+                    date = dateTextField.getText();
+                    //sdf = sdf.format(selectedDate);
+                }
+            });
+        }
+    });
+
+
+
+    int result = JOptionPane.showConfirmDialog(null, myPanel, "Add Action", JOptionPane.OK_CANCEL_OPTION);
+
+    if (result == JOptionPane.OK_OPTION) {
+        String newActionButton = actionInput.getText();
+        if (!newActionButton.isEmpty()) {
+            actions.add(newActionButton);
+            date = dateTextField.getText();
+            JLabel label = newAction(newActionButton,date);
+            String selectedUrgency = (String) urgencyDropdown.getSelectedItem();
+            switch (selectedUrgency) {
+                case "Urgent":
+                    label.setBackground(Color.RED);
+                    //label.setFont(new Font("Times", Font.PLAIN, 14));
+                    label.setForeground(Color.white);
+                    break;
+                case "Current":
+                    label.setBackground(Color.GREEN);
+                    label.setForeground(Color.white);
+                    break;
+                case "Eventual":
+                    label.setBackground(Color.blue);
+                    label.setForeground(Color.white);
+                    break;
+                case "Inactive":
+                    label.setBackground(Color.GRAY);
+                    label.setForeground(Color.white);
+                    break;
+                default:
+                    // Default color if none of the urgencies match
+                    label.setBackground(Color.WHITE);
+                    break;
+            }
+            
+            int insertIndex = 0;
+            for (int i = 0; i < actionsPanel.getComponentCount(); i++) {
+                Component component = actionsPanel.getComponent(i);
+                if (component instanceof JPanel) {
+                    JPanel panel = (JPanel) component;
+                    JLabel existingLabel = (JLabel) panel.getComponent(0);
+                    String existingUrgency = existingLabel.getBackground().toString();
+
+                    switch (selectedUrgency) {
+                        case "Urgent":
+                            if (existingUrgency.equals(Color.RED.toString())) {
+                                insertIndex = i + 1;
+                            }
+                            break;
+                        case "Current":
+                            if (existingUrgency.equals(Color.RED.toString()) || existingUrgency.equals(Color.GREEN.toString())) {
+                                insertIndex = i + 1;
+                            }
+                            break;
+                        case "Eventual":
+                            if (existingUrgency.equals(Color.RED.toString()) || existingUrgency.equals(Color.GREEN.toString()) || existingUrgency.equals(Color.BLUE.toString())) {
+                                insertIndex = i + 1;
+                            }
+                            break;
+                        case "Inactive":
+                        	 if (existingUrgency.equals(Color.RED.toString()) || existingUrgency.equals(Color.GREEN.toString()) || existingUrgency.equals(Color.BLUE.toString())) {
+                                 insertIndex = i + 1;
+                             }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            this.newActionButton.setText("");
+            JPanel labelPanel = new JPanel(new BorderLayout(0,10));
+            labelPanel.setPreferredSize(new Dimension(450, 60));
+            label.setOpaque(true);
+            //label.setPreferredSize(new Dimension(50, 50)); 
+            label.setHorizontalAlignment(SwingConstants.LEFT);  
+            ImageIcon image = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/ToDoList/src/threebars_106419.png");
+            fileMenuButton = new JButton(image);
+            fileMenuButton.setActionCommand("drag");
+       	 	fileMenuButton.setOpaque(false);
+       	 	fileMenuButton.setContentAreaFilled(false);
+       	 	fileMenuButton.setBorderPainted(false);
+       	 	labelPanel.add(label, BorderLayout.CENTER);
+       	 	labelPanel.add(fileMenuButton, BorderLayout.WEST);
+       	 	labelPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,8));
+       	 	actionsPanel.add(labelPanel, insertIndex);
+       	 	actionsPanel.revalidate();
+       	 	actionsPanel.repaint();
+
+         // Update the existing scroll pane with the modified actions panel
+         scrollPane.setViewportView(actionsPanel);
+            this.newActionButton.setText("");
+        }
+    }
+}
+
+
+ }
