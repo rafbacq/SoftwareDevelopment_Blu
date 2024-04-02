@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -45,7 +46,8 @@ public class Test extends JFrame {
 
         getContentPane().add(new JScrollPane(toDoTable), BorderLayout.CENTER);
         topPanel = new JPanel(new BorderLayout());
-        ImageIcon fileImage = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/menuIcon.png");
+       
+        ImageIcon fileImage = new ImageIcon(getClass().getResource("menu_456243 (3).png"));
         fileMenuButton = new JButton(fileImage);
         fileMenuButton.setActionCommand("File");
         fileMenuButton.setOpaque(false);
@@ -139,11 +141,19 @@ public class Test extends JFrame {
     }
 
     private void updateUIWithTheme(String theme) {
-        switch (theme) {
+    	 ImageIcon winterFileImage = new ImageIcon(getClass().getResource("whiteMenuIcon.png"));
+        
+    	switch (theme) {
             case "Love":
             	this.topPanel.setBackground(Color.RED);
-                this.addButton.setForeground(Color.RED);
-                this.removeButton.setForeground(Color.RED);
+                this.addButton.setForeground(Color.WHITE);
+                addButton.setBorderPainted(false);
+                addButton.setOpaque(true);
+                addButton.setBackground(Color.RED);
+                this.removeButton.setForeground(Color.WHITE);
+                removeButton.setBorderPainted(false);
+                removeButton.setOpaque(true);
+                removeButton.setBackground(Color.RED);
                 this.getContentPane().setForeground(Color.MAGENTA);
                 this.title.setForeground(Color.white);
                 // Make table columns red
@@ -153,8 +163,15 @@ public class Test extends JFrame {
                 break;
             case "Halloween":
             	this.topPanel.setBackground(Color.BLACK);
-                this.addButton.setForeground(Color.ORANGE);
-                this.removeButton.setForeground(Color.ORANGE);
+            	topPanel.setForeground(Color.ORANGE);
+            	this.addButton.setForeground(Color.BLACK);
+            	addButton.setBorderPainted(false);
+                addButton.setOpaque(true);
+                addButton.setBackground(Color.ORANGE);
+                this.removeButton.setForeground(Color.BLACK);
+                removeButton.setBorderPainted(false);
+                removeButton.setOpaque(true);
+                removeButton.setBackground(Color.ORANGE);
                 //this.getContentPane().setForeground(Color.MAGENTA);
                 this.title.setForeground(Color.black);
                 // Make table columns red
@@ -164,8 +181,15 @@ public class Test extends JFrame {
                 break;
             case "Winter":
             	this.topPanel.setBackground(new Color(173,216,230));
-                this.addButton.setForeground(new Color(173,216,230));
-                this.removeButton.setForeground(new Color(173,216,230));
+            	this.addButton.setForeground(Color.WHITE);
+            	addButton.setBorderPainted(false);
+                addButton.setOpaque(true);
+                addButton.setBackground(new Color(173,216,230));
+                this.removeButton.setForeground(Color.WHITE);
+                removeButton.setBorderPainted(false);
+                removeButton.setOpaque(true);
+                removeButton.setBackground(new Color(173,216,230));
+                fileMenuButton.setIcon(winterFileImage);
                 this.title.setForeground(Color.white);
                 if (toDoTable != null) {
                     updateTableColor(new Color(173,216,230));
@@ -173,11 +197,21 @@ public class Test extends JFrame {
                 break;
             case "Dark mode":
                 this.topPanel.setBackground(Color.BLACK);
-                this.addButton.setForeground(Color.white);
-                addButton.setBackground(Color.black);
-                this.removeButton.setOpaque(true); // Set the button to be opaque
-                this.removeButton.setBackground(Color.BLACK); // Set the background color
-                this.removeButton.setForeground(Color.WHITE); 
+                this.addButton.setForeground(Color.WHITE);
+            	addButton.setBorderPainted(false);
+                addButton.setOpaque(true);
+                addButton.setBackground(Color.BLACK);
+                this.removeButton.setForeground(Color.WHITE);
+                removeButton.setBorderPainted(false);
+                removeButton.setOpaque(true);
+                removeButton.setBackground(Color.BLACK);
+                fileMenuButton = new JButton(fileImage);
+                fileMenuButton.setActionCommand("File");
+                fileMenuButton.setOpaque(false);
+                fileMenuButton.setContentAreaFilled(false);
+                fileMenuButton.setBorderPainted(false);
+                topPanel.add(fileMenuButton, BorderLayout.EAST);
+                getContentPane().add(topPanel, BorderLayout.NORTH);
                 this.title.setForeground(Color.white);
                 if (toDoTable != null) {
                     updateTableColor(Color.black);
@@ -185,16 +219,45 @@ public class Test extends JFrame {
                 break;
             case "Pastel":
                 this.topPanel.setBackground(new Color(250, 218, 221));
-                this.addButton.setForeground(new Color(250, 218, 221));
-                this.removeButton.setForeground(new Color(250, 218, 221));
+            
+                this.addButton.setForeground(Color.WHITE);
+            	addButton.setBorderPainted(false);
+                addButton.setOpaque(true);
+                addButton.setBackground(new Color(250, 218, 221));
+                this.removeButton.setForeground(Color.WHITE);
+                removeButton.setBorderPainted(false);
+                removeButton.setOpaque(true);
+                removeButton.setBackground(new Color(250, 218, 221));
+                fileMenuButton = new JButton(fileImage);
+                fileMenuButton.setActionCommand("File");
+                fileMenuButton.setOpaque(false);
+                fileMenuButton.setContentAreaFilled(false);
+                fileMenuButton.setBorderPainted(false);
+                topPanel.add(fileMenuButton, BorderLayout.EAST);
+                getContentPane().add(topPanel, BorderLayout.NORTH);
                 this.title.setForeground(Color.white);
                 if (toDoTable != null) {
                      updateTableColor(new Color(250, 218, 221));
                 }      	
                 break;
-                 default:
+            case "Default":
+            	  this.topPanel.setBackground(Color.gray);
+                  
+                  this.addButton.setForeground(Color.BLACK);
+              	addButton.setBorderPainted(false);
+                  addButton.setOpaque(true);
+                  addButton.setBackground(Color.gray);
+                  this.removeButton.setForeground(Color.BLACK);
+                  removeButton.setBorderPainted(false);
+                  removeButton.setOpaque(true);
+                  removeButton.setBackground(Color.gray);
+                 
+                  this.title.setForeground(Color.white);
+                  if (toDoTable != null) {
+                       updateTableColor(Color.gray);
+                  }      	
+                  break;
                 // Handle other themes or default case
-                break;
         }
     }
     // Method to update table colors
@@ -281,7 +344,7 @@ public class Test extends JFrame {
 	}
     
     private Date showDatePicker() {
-		Calender2 calendar = new Calender2();
+		Calender calendar = new Calender();
 		int result = JOptionPane.showConfirmDialog(null, calendar, "Select Date", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 			return calendar.getSelectedDate();
@@ -289,7 +352,44 @@ public class Test extends JFrame {
 		return null;
 	}
     private void sortTableByUrgency() {
-        // Your sorting implementation
+    	   TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+           sorter.setComparator(2, new UrgencyDateComparator()); // Assuming urgency column index is 2
+           ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<>();
+
+           // First, sort by urgency
+           sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING)); // Assuming urgency column index is 2
+
+           // Then, within each urgency level, sort by date (descending order)
+           sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING)); // Assuming date column index is 1
+
+           sorter.setSortKeys(sortKeys);
+           toDoTable.setRowSorter(sorter);    }
+    
+    // Custom comparator to sort by urgency and then by date
+    class UrgencyDateComparator implements Comparator<Object> {
+        @Override
+        public int compare(Object o1, Object o2) {
+            String urgency1 = (String) o1;
+            String urgency2 = (String) o2;
+
+            // Custom ordering for urgency levels
+            Map<String, Integer> urgencyOrder = new HashMap<>();
+            urgencyOrder.put("Urgent", 4);
+            urgencyOrder.put("Current", 3);
+            urgencyOrder.put("Eventual", 2);
+            urgencyOrder.put("Inactive", 1);
+
+            int result = Integer.compare(urgencyOrder.getOrDefault(urgency2, 0), urgencyOrder.getOrDefault(urgency1, 0));
+            if (result != 0) {
+                return result;
+            }
+
+            // If urgency levels are the same, compare dates (assuming the date is in String format)
+            String date1 = (String) o1; // Assuming date is stored as String
+            String date2 = (String) o2; // Assuming date is stored as String
+            // Assuming the date format is "yyyy-MM-dd"
+            return date2.compareTo(date1); // Compare dates in descending order
+        }
     }
 
     private void showFileMenuPopup(Component component) {
