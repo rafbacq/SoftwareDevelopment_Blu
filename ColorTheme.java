@@ -23,7 +23,7 @@ public class ColorTheme implements ActionListener {
         contentPane.setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
         contentPane.setPreferredSize(new Dimension(600, 600));
         System.out.print(getClass());
-        ImageIcon icon= new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/halloween2.jpg");
+        ImageIcon icon= new ImageIcon(getClass().getResource("halloween2.jpg"));
 	    button = new JButton("Halloween", icon);
 	    button.setHorizontalTextPosition(SwingConstants.CENTER);
 		 button.setFont(new Font("Serif", Font.BOLD, 40));
@@ -34,7 +34,7 @@ public class ColorTheme implements ActionListener {
 		 button.setPreferredSize(new Dimension(10, 10));
 
 
-		 ImageIcon icon1= new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/love3.jpg");
+		 ImageIcon icon1= new ImageIcon(getClass().getResource("love3.jpg"));
 		 button1 = new JButton("Love",icon1);
 		 button1.setHorizontalTextPosition(SwingConstants.CENTER);
 		 button1.setFont(new Font("Serif", Font.BOLD, 40));
@@ -47,7 +47,7 @@ public class ColorTheme implements ActionListener {
 		
 		
 		 /* Create and add button */
-		 ImageIcon icon2 = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/winter.jpg");
+		 ImageIcon icon2 = new ImageIcon(getClass().getResource("winter.jpg"));
 		 button2 = new JButton("Winter", icon2);
 		 button2.setHorizontalTextPosition(SwingConstants.CENTER);
 		 button2.setFont(new Font("Serif", Font.BOLD, 40));
@@ -56,7 +56,7 @@ public class ColorTheme implements ActionListener {
 		 button2.addActionListener(this);
 		 contentPane.add(button2);
 		
-		 ImageIcon icon3 = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/pastel.jpg");
+		 ImageIcon icon3 = new ImageIcon(getClass().getResource("pastel.jpg"));
 		 button4 = new JButton("Pastel", icon3);
 		 button4.setHorizontalTextPosition(SwingConstants.CENTER);
 		 button4.setFont(new Font("Serif", Font.BOLD, 40));
@@ -64,7 +64,7 @@ public class ColorTheme implements ActionListener {
 		 button4.addActionListener(this);
 		 contentPane.add(button4, BorderLayout.CENTER);
 		
-		 ImageIcon icon4 = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/darkmode.jpg");
+		 ImageIcon icon4 = new ImageIcon(getClass().getResource("darkmode.jpg"));
 		 button3 = new JButton("Dark mode", icon4);
 		 button3.setHorizontalTextPosition(SwingConstants.CENTER);
 		 button3.setFont(new Font("Serif", Font.BOLD, 37));
@@ -309,7 +309,7 @@ public class ColorTheme implements ActionListener {
 
         @Override
         public void draw(Graphics g) {
-        	ImageIcon heart = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/R2.png");
+        	ImageIcon heart = new ImageIcon(getClass().getResource("R2.png"));
         	Image image = heart.getImage();
         	g.drawImage(image, x, y, SIZE, SIZE, null);
             //g.setColor(Color.RED);
@@ -331,8 +331,8 @@ public class ColorTheme implements ActionListener {
 
         @Override
         public void draw(Graphics g) {
-        	ImageIcon heart = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/R.png");
-        	Image image = heart.getImage();
+        	ImageIcon pumpkin = new ImageIcon(getClass().getResource("R.png"));
+        	Image image = pumpkin.getImage();
         	g.drawImage(image, x, y, SIZE, SIZE, null);
             //g.setColor(Color.ORANGE); // Change color to orange
             //g.fillOval(x, y, SIZE, SIZE);
