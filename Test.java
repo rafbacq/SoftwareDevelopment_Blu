@@ -22,7 +22,10 @@ public class Test extends JFrame {
     private JPanel topPanel;
     private JLabel title;
     private JButton fileMenuButton;
-
+    private ColorTheme colorThemePage;
+    private JPanel inputPanel;
+    private JButton addButton;
+    private JButton removeButton;
     public Test() {
         setTitle("To Do List");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,7 +45,7 @@ public class Test extends JFrame {
 
         getContentPane().add(new JScrollPane(toDoTable), BorderLayout.CENTER);
         topPanel = new JPanel(new BorderLayout());
-        ImageIcon fileImage = new ImageIcon("C:/Users/lshen0597/eclipse-workspace/Project2/src/menu_456243 (3).png");
+        ImageIcon fileImage = new ImageIcon("/Users/lilyshen/eclipse-workspace/ToDoList/menuIcon.png");
         fileMenuButton = new JButton(fileImage);
         fileMenuButton.setActionCommand("File");
         fileMenuButton.setOpaque(false);
@@ -54,9 +57,9 @@ public class Test extends JFrame {
         topPanel.add(fileMenuButton, BorderLayout.EAST);
         topPanel.add(title, BorderLayout.CENTER);
 
-        JPanel inputPanel = new JPanel();
-        JButton addButton = new JButton("Add Task");
-        JButton removeButton = new JButton("Remove Task");
+        inputPanel = new JPanel();
+        addButton = new JButton("Add Task");
+        removeButton = new JButton("Remove Task");
         inputPanel.add(addButton);
         inputPanel.add(removeButton);
         getContentPane().add(inputPanel, BorderLayout.SOUTH);
@@ -138,12 +141,58 @@ public class Test extends JFrame {
     private void updateUIWithTheme(String theme) {
         switch (theme) {
             case "Love":
+            	this.topPanel.setBackground(Color.RED);
+                this.addButton.setForeground(Color.RED);
+                this.removeButton.setForeground(Color.RED);
+                this.getContentPane().setForeground(Color.MAGENTA);
+                this.title.setForeground(Color.white);
                 // Make table columns red
                 if (toDoTable != null) {
                 	updateTableColor(Color.RED);
-                	break;
-            // Add cases for other themes if needed
-                } default:
+                }
+                break;
+            case "Halloween":
+            	this.topPanel.setBackground(Color.BLACK);
+                this.addButton.setForeground(Color.ORANGE);
+                this.removeButton.setForeground(Color.ORANGE);
+                //this.getContentPane().setForeground(Color.MAGENTA);
+                this.title.setForeground(Color.black);
+                // Make table columns red
+                if (toDoTable != null) {
+                	updateTableColor(Color.ORANGE);
+                }
+                break;
+            case "Winter":
+            	this.topPanel.setBackground(new Color(173,216,230));
+                this.addButton.setForeground(new Color(173,216,230));
+                this.removeButton.setForeground(new Color(173,216,230));
+                this.title.setForeground(Color.white);
+                if (toDoTable != null) {
+                    updateTableColor(new Color(173,216,230));
+                }
+                break;
+            case "Dark mode":
+                this.topPanel.setBackground(Color.BLACK);
+                this.addButton.setForeground(Color.white);
+                addButton.setBackground(Color.black);
+                this.removeButton.setOpaque(true); // Set the button to be opaque
+                this.removeButton.setBackground(Color.BLACK); // Set the background color
+                this.removeButton.setForeground(Color.WHITE); 
+                this.title.setForeground(Color.white);
+                if (toDoTable != null) {
+                    updateTableColor(Color.black);
+                }
+                break;
+            case "Pastel":
+                this.topPanel.setBackground(new Color(250, 218, 221));
+                this.addButton.setForeground(new Color(250, 218, 221));
+                this.removeButton.setForeground(new Color(250, 218, 221));
+                this.title.setForeground(Color.white);
+                if (toDoTable != null) {
+                     updateTableColor(new Color(250, 218, 221));
+                }      	
+                break;
+                 default:
                 // Handle other themes or default case
                 break;
         }
@@ -232,7 +281,7 @@ public class Test extends JFrame {
 	}
     
     private Date showDatePicker() {
-		Calender calendar = new Calender();
+		Calender2 calendar = new Calender2();
 		int result = JOptionPane.showConfirmDialog(null, calendar, "Select Date", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 			return calendar.getSelectedDate();
@@ -263,12 +312,13 @@ public class Test extends JFrame {
         colorTheme.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ColorTheme background = new ColorTheme();
-                background.color = "Default";
-                int result = JOptionPane.showConfirmDialog(null, background, "Select Background", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    color = background.getColorTheme();
-                }
+            	Test.this.colorThemePage = new ColorTheme(Test.this);
+                colorThemePage.color = "Default";
+                //int result = JOptionPane.showConfirmDialog(null, colorTheme, "Select Background", JOptionPane.OK_CANCEL_OPTION);
+                //if (result == JOptionPane.OK_OPTION) {
+                    //color = colorThemePage.getColorTheme();
+               // }
+                color = colorThemePage.getColorTheme();
                 switch (color) {
                     case "Love":
                         getContentPane().setBackground(new Color(240, 182, 213));
