@@ -99,11 +99,13 @@ public final class Test {
             public void valueChanged(ListSelectionEvent event) {
                 if (!event.getValueIsAdjusting()) {
                     int selectedRow = toDoTable.getSelectedRow();
+                    sortTableByUrgency();
                     System.out.println(selectedRow);
 
                 }
             }
         });
+
         // Add FocusListener to clear selection when table loses focus
         toDoTable.addFocusListener(new FocusAdapter() {
             @Override
@@ -134,17 +136,13 @@ public final class Test {
         toDoTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
-                selectedMainTableRow= toDoTable.getSelectedRow();
-                System.out.println("selectedMainTableRow :"+selectedMainTableRow);
-                if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
-
-                    editTask(false);
-                    sortTableByUrgency();
-                } else if (e.getClickCount() == 2 && SwingUtilities.isRightMouseButton(e)) {
-                    // do nothing
+                if (e.getClickCount() == 2) {
+                    int row = toDoTable.rowAtPoint(e.getPoint());
+                    int column = toDoTable.columnAtPoint(e.getPoint());
+                    if (row >= 0 && column >= 0) {
+                        editTask(row, column);
+                    }
                 }
-
             }
         });
 
@@ -221,7 +219,7 @@ public final class Test {
     private void addTask()
     {
 
-        editTask(true);
+        editTask(-1,-1);
 
         
     }
@@ -231,36 +229,21 @@ public final class Test {
         tableModel.removeRow(toDoTable.getSelectedRow());
     }
 
-    private void editTask(boolean b) {
-        int selectedIndex = toDoTable.getSelectedRow();
-
+    private void editTask(int row, int column) {
         JPanel myPanel = new JPanel();
-        String alreadyInputTask = "";
-        String alreadyInputDate = "";
-        String alreadyInputUrgency = "";
-        if (!b && selectedIndex != -1) {
-            alreadyInputTask = tableModel.getValueAt(selectedIndex, 0).toString();
-            alreadyInputDate = tableModel.getValueAt(selectedIndex, 1).toString();
-            alreadyInputUrgency = tableModel.getValueAt(selectedIndex,2).toString();
-        }
         JTextField editTaskInput = new JTextField(15);
-
-        JComboBox<String> urgencyDropdown = new JComboBox<String>();
-
+        JComboBox<String> urgencyDropdown = new JComboBox<>();
         urgencyDropdown.addItem("");
         urgencyDropdown.addItem("Urgent");
         urgencyDropdown.addItem("Current");
         urgencyDropdown.addItem("Eventual");
         urgencyDropdown.addItem("Inactive");
-
         JButton selectDateButton = new JButton("Select Date");
         JTextField dateTextField = new JTextField(10);
         dateTextField.setEditable(false);
-
         JPanel datePanel = new JPanel();
         datePanel.add(dateTextField);
         datePanel.add(selectDateButton);
-
         myPanel.add(new JLabel("Edit Task: "));
         myPanel.add(editTaskInput);
         myPanel.add(Box.createHorizontalStrut(15));
@@ -269,9 +252,12 @@ public final class Test {
         myPanel.add(new JLabel("Urgency: "));
         myPanel.add(urgencyDropdown);
 
-        editTaskInput.setText(alreadyInputTask);
-        dateTextField.setText(alreadyInputDate);
-
+        // If editing an existing row, populate fields with current data
+        if (row >= 0 && column >= 0) {
+            editTaskInput.setText((String) tableModel.getValueAt(row, 0));
+            dateTextField.setText((String) tableModel.getValueAt(row, 1));
+            urgencyDropdown.setSelectedItem((String) tableModel.getValueAt(row, 2));
+        }
 
         selectDateButton.addActionListener(new ActionListener() {
             @Override
@@ -286,15 +272,13 @@ public final class Test {
 
         int editedTask = JOptionPane.showConfirmDialog(null, myPanel, "Edit Task", JOptionPane.OK_CANCEL_OPTION);
 
-
         if (editedTask == JOptionPane.OK_OPTION) {
-            if (selectedIndex != -1) {
-                tableModel.setValueAt(editTaskInput.getText(), selectedIndex, 0);
-                tableModel.setValueAt(dateTextField.getText(), selectedIndex, 1);
-                tableModel.setValueAt(urgencyDropdown.getSelectedItem(), selectedIndex, 2);
-            } else if (b) {
-                Object[] rowData = { editTaskInput.getText(), dateTextField.getText(),
-                        urgencyDropdown.getSelectedItem() };
+            if (row >= 0 && column >= 0) { // If editing existing row
+                tableModel.setValueAt(editTaskInput.getText(), row, 0);
+                tableModel.setValueAt(dateTextField.getText(), row, 1);
+                tableModel.setValueAt(urgencyDropdown.getSelectedItem(), row, 2);
+            } else { // If adding new row
+                Object[] rowData = {editTaskInput.getText(), dateTextField.getText(), urgencyDropdown.getSelectedItem()};
                 tableModel.addRow(rowData);
             }
         }
