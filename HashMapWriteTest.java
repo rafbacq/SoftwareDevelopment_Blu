@@ -1,15 +1,13 @@
-package smth;
+
+package org.example;
 
 import java.io.*;
-import java.util.Date;
 import java.util.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
 
 public class HashMapWriteTest {
 	HashMap<Integer, ArrayList<ActionItem>> map = new HashMap<>();
+	public String information;
 	
 	static String outputFilePath = "version.txt";
 	File file = new File(outputFilePath);
@@ -19,6 +17,11 @@ public class HashMapWriteTest {
 	{
 		map = new HashMap<>();
 		System.out.println("Map Created");
+	}
+	public String toString()
+	{
+		return information;
+
 	}
 	public static String getFilePath()
 	{
@@ -40,20 +43,28 @@ public class HashMapWriteTest {
             // create new BufferedWriter for the output file 
             bf = new FileWriter(outputFilePath, true); 
             System.out.println("Buffered Reader Created");
-  
+            
+            	
+            //bf.write("Current Version: " + Test.currentVersion);
+			//information+="Current Version: " + Test.currentVersion;
+            
+            
             // iterate map entries 
             for (int i: map.keySet()) {
             	if (map != null) 
             	{
-            		bf.write("V" + i + " -- " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
-            		System.out.println("V" + i + " -- " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
+            		bf.write("V" + i + " ~~ " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
+            		System.out.println("V" + i + " ~~ " + LocalDateTime.now().toString().substring(0, 10) + ";\n");
+					information+="V" + i + " ~~ " + LocalDateTime.now().toString().substring(0, 10) + ";\n";
 	            	for(ActionItem item : map.get(i)) 
 	            	{
 	            		bf.write(item.toFile() + "\n");
 	            		System.out.println(item.toFile() + "\n");
+						information+=item.toFile() + "\n";
 	            	}
 	            	bf.write("split\n");
 	            	System.out.println("split\n");
+					information+="split\n";
             	}
             } 
   
@@ -75,7 +86,7 @@ public class HashMapWriteTest {
 		System.out.println("Complete");
 	}
 	
-	public static void main(String[] args) 
+	/*public static void main(String[] args) 
 	{
 		ArrayList<ActionItem> list = new ArrayList<ActionItem>();
 		list.add(new ActionItem("Nidhin", "Urgent", 2, 5, 2024, "Doing work"));
@@ -90,5 +101,5 @@ public class HashMapWriteTest {
 		h.createVersion(2, list2);
 		h.createVersion(3, list);
 		h.createVersion(4, list2);
-	}
+	}*/
 }
