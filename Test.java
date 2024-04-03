@@ -90,18 +90,19 @@ public final class Test {
 
 
         // Enable table selection and drag-and-drop
-       //XXX toDoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        // XXX toDoTable.setDragEnabled(true);
-        // XXX toDoTable.setDropMode(DropMode.INSERT);
-        // XXX toDoTable.setTransferHandler(new ListItemTransferHandler());
+       //toDoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //toDoTable.setDragEnabled(true);
+        //toDoTable.setDropMode(DropMode.INSERT);
+        //toDoTable.setTransferHandler(new ListItemTransferHandler());
 
         toDoTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
                 if (!event.getValueIsAdjusting()) {
                     int selectedRow = toDoTable.getSelectedRow();
-                    sortTableByUrgency();
-                    System.out.println(selectedRow);
+                    if (selectedRow >= 0) {
+                        selectedMainTableRow = selectedRow;
 
+                    }
                 }
             }
         });
@@ -136,6 +137,12 @@ public final class Test {
         toDoTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount()==1)
+                {
+                    selectedMainTableRow = toDoTable.rowAtPoint(e.getPoint());
+
+
+                }
                 if (e.getClickCount() == 2) {
                     int row = toDoTable.rowAtPoint(e.getPoint());
                     int column = toDoTable.columnAtPoint(e.getPoint());
@@ -225,8 +232,8 @@ public final class Test {
     }
 
     private void removeTask() {
-        int selectedIndex  = toDoTable.getSelectedRow();
-        tableModel.removeRow(toDoTable.getSelectedRow());
+        int selectedIndex  = selectedMainTableRow;
+        tableModel.removeRow(selectedIndex);
     }
 
     private void editTask(int row, int column) {
