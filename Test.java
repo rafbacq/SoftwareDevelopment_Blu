@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -29,6 +30,7 @@ public class Test extends JFrame {
     private JButton removeButton;
     public int selectedMainTableRow;
     public Test() {
+    	//MAINSCREEN FORMAT
         setTitle("To Do List");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
@@ -88,7 +90,7 @@ public class Test extends JFrame {
 
         // Add ActionListener for the "Remove Task" button
         removeButton.addActionListener(e -> removeTask());
-        toDoTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+       /* toDoTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
                 if (!event.getValueIsAdjusting()) {
                     int selectedRow = toDoTable.getSelectedRow();
@@ -98,7 +100,7 @@ public class Test extends JFrame {
                     }
                 }
             }
-        });
+        });*/
         // Add MouseAdapter for handling mouse events (e.g., double-click to edit)
         toDoTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -128,38 +130,15 @@ public class Test extends JFrame {
                 showFileMenuPopup(fileMenuButton);
             }
         });
-        updateTableColors();
 
     }
+    //CHANGING COLOR THEME
     public void onThemeChanged(String theme) {
         // Implement theme change logic here
         updateUIWithTheme(theme);
     }
-    private void updateTableColors() {
-        if (ColorTheme.color != null) {
-            switch (ColorTheme.color) {
-                case "Love":
-                    updateTableColor(Color.RED);
-                    break;
-                case "Halloween":
-                    updateTableColor(Color.BLACK);
-                    break;
-                case "Winter":
-                    updateTableColor(Color.GREEN);
-                    break;
-                case "Dark mode":
-                    updateTableColor(Color.GRAY);
-                    break;
-                case "Pastel":
-                    updateTableColor(Color.BLUE);
-                    break;
-                case "Default":
-                    // Reset to default table colors
-                    break;
-            }
-        }
-    }
-
+ 
+//chnage elements on the mianscreen
     private void updateUIWithTheme(String theme) {
     	 ImageIcon winterFileImage = new ImageIcon(getClass().getResource("whiteMenuIcon.png"));
         
@@ -178,7 +157,7 @@ public class Test extends JFrame {
                 this.title.setForeground(Color.white);
                 // Make table columns red
                 if (toDoTable != null) {
-                	updateTableColor(Color.RED);
+                	updateTableColor(new Color(250, 218, 221), Color.BLACK);
                 }
                 break;
             case "Halloween":
@@ -192,11 +171,12 @@ public class Test extends JFrame {
                 removeButton.setBorderPainted(false);
                 removeButton.setOpaque(true);
                 removeButton.setBackground(Color.ORANGE);
+                fileMenuButton.setIcon(winterFileImage);
                 //this.getContentPane().setForeground(Color.MAGENTA);
-                this.title.setForeground(Color.black);
+                this.title.setForeground(Color.WHITE);
                 // Make table columns red
                 if (toDoTable != null) {
-                	updateTableColor(Color.ORANGE);
+                	updateTableColor(Color.ORANGE, Color.BLACK);
                 }
                 break;
             case "Winter":
@@ -212,11 +192,12 @@ public class Test extends JFrame {
                 fileMenuButton.setIcon(winterFileImage);
                 this.title.setForeground(Color.white);
                 if (toDoTable != null) {
-                    updateTableColor(new Color(173,216,230));
+                    updateTableColor(new Color(173,216,230), Color.WHITE);
                 }
                 break;
             case "Dark mode":
                 this.topPanel.setBackground(Color.BLACK);
+                this.title.setForeground(Color.WHITE);
                 this.addButton.setForeground(Color.WHITE);
             	addButton.setBorderPainted(false);
                 addButton.setOpaque(true);
@@ -229,25 +210,25 @@ public class Test extends JFrame {
 
                 this.title.setForeground(Color.white);
                 if (toDoTable != null) {
-                    updateTableColor(Color.black);
+                    updateTableColor(Color.black, Color.white);
                 }
                 break;
             case "Pastel":
-                this.topPanel.setBackground(new Color(250, 218, 221));
+                this.topPanel.setBackground(new Color(193, 225, 193));
             
                 this.addButton.setForeground(Color.WHITE);
             	addButton.setBorderPainted(false);
                 addButton.setOpaque(true);
-                addButton.setBackground(new Color(250, 218, 221));
+                addButton.setBackground(new Color(193, 225, 193));
                 this.removeButton.setForeground(Color.WHITE);
                 removeButton.setBorderPainted(false);
                 removeButton.setOpaque(true);
-                removeButton.setBackground(new Color(250, 218, 221));
+                removeButton.setBackground(new Color(193, 225, 193));
                 fileMenuButton.setIcon(winterFileImage);
 
                 this.title.setForeground(Color.white);
                 if (toDoTable != null) {
-                     updateTableColor(new Color(250, 218, 221));
+                     updateTableColor(new Color(250, 218, 221), Color.black);
                 }      	
                 break;
             case "Default":
@@ -264,16 +245,16 @@ public class Test extends JFrame {
                  
                   this.title.setForeground(Color.white);
                   if (toDoTable != null) {
-                       updateTableColor(Color.gray);
+                       updateTableColor(Color.gray, Color.black);
                   }      	
                   break;
                 // Handle other themes or default case
         }
     }
     // Method to update table colors
-    private void updateTableColor(Color color) {
+    private void updateTableColor(Color backgroundColor, Color textColor) {
         // Update table's default renderer with new background color
-        toDoTable.setDefaultRenderer(Object.class, new CustomRowColorRenderer(color));
+        toDoTable.setDefaultRenderer(Object.class, new CustomRowColorRenderer(backgroundColor, textColor));
         // Repaint the table
         toDoTable.repaint();
     }
