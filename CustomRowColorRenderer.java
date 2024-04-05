@@ -5,9 +5,9 @@ import java.awt.*;
 public class CustomRowColorRenderer extends DefaultTableCellRenderer {
 
     private Color backgroundColor; // Background color for the table cells
-
+    private Color textColor;
     // Constructor to set the background color
-    public CustomRowColorRenderer(Color backgroundColor) {
+    public CustomRowColorRenderer(Color backgroundColor, Color textColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -18,7 +18,7 @@ public class CustomRowColorRenderer extends DefaultTableCellRenderer {
 
         // Set the background color for the component
         component.setBackground(backgroundColor);
-
+        component.setForeground(textColor);        
         return component;
     }
 }
